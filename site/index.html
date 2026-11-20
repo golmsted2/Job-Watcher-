@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1b2a">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Job Watcher · Today</title>
+</head>
+<body data-page="today">
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
+    <nav aria-label="Primary navigation">
+      <a class="active" href="./index.html">Today</a>
+      <a href="./browse.html">Browse</a>
+      <a href="./market.html">Market</a>
+    </nav>
+    <span class="offline-pill" id="network-status">Online-ready</span>
+  </header>
+  <main class="page-shell">
+    <section class="hero compact-hero">
+      <div>
+        <p class="eyebrow">Financial data analytics · daily brief</p>
+        <h1>The job market, <em>without the refresh spiral.</em></h1>
+        <p class="lede">A calm read on what changed across the employers you care about.</p>
+      </div>
+      <div class="run-stamp"><span>LAST RUN</span><strong id="run-date">—</strong><small id="run-time">—</small></div>
+    </section>
+
+    <section class="metric-grid" aria-label="Latest run metrics">
+      <article class="metric-card"><span>Days captured</span><strong id="stat-days">—</strong><small>successful run days</small></article>
+      <article class="metric-card accent-card"><span>Open postings</span><strong id="stat-open">—</strong><small>across the watch list</small></article>
+      <article class="metric-card"><span>New today</span><strong id="stat-new">—</strong><small>excluding first-run inventory</small></article>
+      <article class="metric-card"><span>Removed today</span><strong id="stat-removed">—</strong><small>confirmed by a fresh source</small></article>
+    </section>
+
+    <section class="two-column">
+      <article class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">Source health</p><h2>Every board has a pulse.</h2></div><span class="live-dot"></span></div>
+        <div id="source-status" class="source-list"></div>
+      </article>
+      <article class="panel change-panel">
+        <div class="panel-heading"><div><p class="eyebrow">What moved</p><h2>New and gone.</h2></div><a class="text-link" href="./browse.html">Browse all</a></div>
+        <div class="change-columns"><div><h3>New</h3><div id="new-list" class="change-list"></div></div><div><h3>Removed</h3><div id="removed-list" class="change-list"></div></div></div>
+      </article>
+    </section>
+
+    <section class="callout"><div class="callout-icon">↗</div><div><strong>Start with your role.</strong><p>Browse opens in the analyst and analytics view. Switch to all postings whenever you want to see the full market signal.</p></div><a class="button" href="./browse.html">Explore postings</a></section>
+  </main>
+  <footer class="footer"><span>FDA Job Watcher</span><span>Data is calculated in your browser from the published history.</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
+

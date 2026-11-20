@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1b2a">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Job Watcher · Market</title>
+</head>
+<body data-page="market">
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
+    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a href="./browse.html">Browse</a><a class="active" href="./market.html">Market</a></nav>
+    <span class="offline-pill" id="network-status">Online-ready</span>
+  </header>
+  <main class="page-shell">
+    <section class="hero compact-hero"><div><p class="eyebrow">Market read · calculated locally</p><h1>What the history <em>is telling us.</em></h1><p class="lede">Six signals, recomputed from the posting history every time the data grows.</p></div><div class="hero-number"><strong id="market-days">—</strong><span>days in history</span></div></section>
+    <section class="market-grid">
+      <article class="insight-card wide"><div class="insight-copy"><p class="eyebrow">Hiring flow</p><h2 id="new-finding">New postings are arriving.</h2><p id="new-explain"></p></div><div id="new-chart" class="chart"></div></article>
+      <article class="insight-card wide"><div class="insight-copy"><p class="eyebrow">Churn</p><h2 id="removed-finding">Removals show the market moving.</h2><p id="removed-explain"></p></div><div id="removed-chart" class="chart"></div></article>
+      <article class="insight-card"><p class="eyebrow">Current shape</p><h2>Open postings by employer</h2><div id="employer-chart" class="chart tall"></div></article>
+      <article class="insight-card"><p class="eyebrow">Shelf life</p><h2 id="days-finding">Roles stay open —</h2><p id="days-explain"></p><div class="big-stat" id="days-stat">—</div></article>
+      <article class="insight-card"><p class="eyebrow">Speed</p><h2 id="share-finding">Early removals are —</h2><p id="share-explain"></p><div class="big-stat coral" id="share-stat">—</div></article>
+      <article class="insight-card"><p class="eyebrow">Geography</p><h2>Top locations among open roles</h2><div id="location-chart" class="chart tall"></div></article>
+    </section>
+  </main>
+  <footer class="footer"><span>FDA Job Watcher</span><span>First-run inventory is excluded where a start date would be unknowable.</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
+

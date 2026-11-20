@@ -1,0 +1,10 @@
+{
+  "name": "FDA Job Watcher",
+  "short_name": "Job Watcher",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f7f4",
+  "theme_color": "#0e1b2a",
+  "description": "A daily view of the roles entering and leaving a curated job market."
+}
+
