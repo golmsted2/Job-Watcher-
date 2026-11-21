@@ -5,6 +5,7 @@
   "display": "standalone",
   "background_color": "#f6f7f4",
   "theme_color": "#0e1b2a",
-  "description": "A daily view of the roles entering and leaving a curated job market."
+  "description": "A daily view of the roles entering and leaving a curated job market.",
+  "icons": [{"src": "./assets/favicon.svg?v=money", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
 }
 
