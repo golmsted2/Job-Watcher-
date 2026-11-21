@@ -146,3 +146,22 @@ def test_normalize_adds_salary_and_early_career_signals():
     assert row["duplicate_key"] == "test bank 2027 credit analyst program dallas tx"
 
 
+def test_normalize_extracts_salary_range_from_published_description():
+    row = normalize_posting(
+        {
+            "id": "phenom-salary-1",
+            "title": "Financial Analyst",
+            "location": "Chicago, IL",
+            "description": "Salary Range: $55,000 - $65,000 Annual. Benefits included.",
+            "applyUrl": "https://example.test/phenom-salary-1",
+        },
+        Source("phenom-test", "Test Bank", "Phenom", "https://example.test/jobs"),
+    )
+
+    assert row["salary_min"] == 55000
+    assert row["salary_max"] == 65000
+    assert row["salary_currency"] == "USD"
+    assert row["salary_period"] == "year"
+    assert row["salary_text"] == "$55,000–$65,000 annual"
+
+

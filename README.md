@@ -13,7 +13,7 @@ FDA Job Watcher is a daily, public job-market tracker for the Financial Data Ana
 - **Canonical history:** `data/processed/history.json` (descriptions remain in compressed raw evidence so the browser file stays small).
 - **Run status:** `data/processed/status.json`.
 - **Published site data:** `site/data/history.json` and `site/data/status.json`.
-- **Candidate signals:** salary ranges, work model, internship/new-grad signals, sponsorship language, degree language, freshness, match score, and a normalized duplicate key are derived during normalization.
+- **Candidate signals:** salary ranges (including ranges embedded in published ATS descriptions), annualized salary values, work model, internship/new-grad signals, sponsorship language, degree language, freshness, match score, and a normalized duplicate key are derived during normalization.
 - **Privacy:** favorites, application status, and private notes stay in the browser's local storage; they are not committed to the repository or sent to the site.
 - **Portable workspace:** saved searches, profile skills, resume text, application deadlines, and analytics can be exported/imported as a local JSON backup. This is the static-site substitute for cross-device accounts until a server-side identity and database are added.
 

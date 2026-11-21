@@ -83,10 +83,15 @@ def _number(value: Any) -> float | None:
         return None
     if isinstance(value, (int, float)):
         return float(value)
-    match = re.search(r"\d[\d,]*(?:\.\d+)?", str(value))
+    match = re.search(r"\d[\d,]*(?:\.\d+)?\s*[kKmM]?", str(value))
     if not match:
         return None
-    return float(match.group(0).replace(",", ""))
+    token = match.group(0).replace(",", "").strip()
+    multiplier = {"k": 1_000, "m": 1_000_000}.get(token[-1:].lower(), 1)
+    if multiplier != 1:
+        token = token[:-1].strip()
+    number = float(token) * multiplier
+    return number if number > 0 else None
 
 
 def _salary(raw: dict[str, Any], ats: str) -> tuple[float | None, float | None, str, str]:
@@ -165,6 +170,36 @@ def _salary(raw: dict[str, Any], ats: str) -> tuple[float | None, float | None, 
         high = f"${maximum:,.0f}" if maximum is not None else ""
         text = f"{low}–{high}" if low and high and low != high else (low or high)
     return minimum, maximum, currency, text
+
+
+def _salary_from_text(value: Any) -> tuple[float | None, float | None, str, str]:
+    """Extract a published range embedded in an ATS description."""
+
+    text = strip_html(value)
+    context = re.search(r"\b(?:salary|compensation|pay|wage)\b", text, re.IGNORECASE)
+    if not context:
+        return None, None, "", ""
+    excerpt = text[context.start():context.start() + 360]
+    numbers = re.findall(r"(?:USD\s*)?\$?\s*\d[\d,]*(?:\.\d+)?\s*[kKmM]?", excerpt, re.IGNORECASE)
+    if len(numbers) < 2:
+        return None, None, "", ""
+    minimum = _number(numbers[0])
+    maximum = _number(numbers[1])
+    if minimum is None or maximum is None:
+        return None, None, "", ""
+    lower = excerpt.lower()
+    if re.search(r"\b(?:hour|hourly|hr)\b", lower):
+        period = "hourly"
+    elif re.search(r"\b(?:week|weekly)\b", lower):
+        period = "weekly"
+    elif re.search(r"\b(?:month|monthly)\b", lower):
+        period = "monthly"
+    else:
+        period = "annual"
+    currency = "USD" if "$" in excerpt or re.search(r"\bUSD\b", excerpt, re.IGNORECASE) else ""
+    low = f"${minimum:,.0f}" if currency else f"{minimum:,.0f}"
+    high = f"${maximum:,.0f}" if currency else f"{maximum:,.0f}"
+    return minimum, maximum, currency, f"{low}–{high} {period}"
 
 
 def _salary_period(text: str, minimum: float | None, maximum: float | None) -> str:
@@ -397,6 +432,8 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         workplace_match = re.search(r"\b(remote|hybrid|on[- ]?site)\b", f"{title} {location} {description}", re.IGNORECASE)
         workplace_type = workplace_match.group(1).title() if workplace_match else ""
     salary_min, salary_max, salary_currency, salary_text = _salary(raw, ats)
+    if salary_min is None and salary_max is None:
+        salary_min, salary_max, salary_currency, salary_text = _salary_from_text(description)
     salary_period = _salary_period(salary_text, salary_min, salary_max)
     salary_annual_min = _annualize(salary_min, salary_period)
     salary_annual_max = _annualize(salary_max, salary_period)
