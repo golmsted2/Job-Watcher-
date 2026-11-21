@@ -28,6 +28,17 @@ nav a:hover, nav a.active { color: white; border-bottom-color: var(--yellow); }
 .page-shell { max-width: 1160px; margin: 0 auto; padding: 58px 24px 80px; }
 .hero { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin-bottom: 42px; }
 .compact-hero { min-height: 180px; }
+.home-hero { display: grid; grid-template-columns: .92fr 1.08fr; align-items: stretch; min-height: 350px; padding: 31px; overflow: hidden; color: white; background: var(--navy); }
+.home-hero-copy { align-self: center; max-width: 510px; padding: 8px 18px 8px 3px; }
+.home-hero .eyebrow { color: var(--yellow); }
+.home-hero h1 { color: white; }
+.home-hero .lede { color: #b8c8d3; }
+.hero-art { position: relative; min-height: 288px; overflow: hidden; background: #091725; }
+.hero-art::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(9,23,37,.72), transparent 35%, rgba(9,23,37,.08)); }
+.hero-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero-art .run-stamp { position: absolute; right: 19px; bottom: 19px; z-index: 1; min-width: 145px; color: white; border-left-color: var(--yellow); background: rgba(14,27,42,.9); box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+.hero-art .run-stamp span, .hero-art .run-stamp small { color: #b8c8d3; }
+.hero-art .run-stamp strong { color: white; }
 .eyebrow { margin: 0 0 10px; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
 h1, h2, h3, p { margin-top: 0; }
 h1 { max-width: 700px; margin-bottom: 12px; color: var(--navy); font: 800 clamp(38px, 5vw, 66px)/.98 Georgia, "Times New Roman", serif; letter-spacing: -.055em; }
@@ -94,6 +105,13 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .star.saved { color: var(--yellow); }
 .apply-button { padding: 11px 13px; color: white; background: var(--blue); font-size: 12px; font-weight: 800; text-decoration: none; white-space: nowrap; }
 .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.market-visual { position: relative; min-height: 280px; margin-bottom: 18px; overflow: hidden; background: var(--navy); }
+.market-visual img { display: block; width: 100%; height: 300px; object-fit: cover; object-position: center; opacity: .86; }
+.market-visual::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(14,27,42,.98) 0%, rgba(14,27,42,.78) 28%, rgba(14,27,42,.16) 66%, rgba(14,27,42,.06)); }
+.market-visual-copy { position: absolute; inset: 0 auto 0 0; z-index: 1; display: flex; flex-direction: column; justify-content: center; max-width: 470px; padding: 30px 34px; color: white; }
+.market-visual-copy .eyebrow { color: var(--yellow); }
+.market-visual-copy h2 { color: white; }
+.market-visual-copy p:not(.eyebrow) { margin: 12px 0 0; color: #c2d0d8; font-size: 14px; line-height: 1.55; }
 .insight-card { min-height: 230px; padding: 25px; }
 .insight-card.wide { display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; min-height: 250px; }
 .insight-card h2 { margin-bottom: 12px; }
@@ -125,11 +143,17 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   .offline-pill { display: none; }
   .page-shell { padding-top: 36px; }
   .hero { display: block; }
+  .home-hero { display: block; padding: 24px; }
+  .home-hero-copy { padding: 0; }
+  .hero-art { min-height: 235px; margin-top: 20px; }
   .run-stamp, .hero-number { display: inline-block; margin-top: 24px; }
+  .hero-art .run-stamp { display: block; margin-top: 0; }
   .metric-grid, .change-columns, .filter-panel { grid-template-columns: 1fr; }
   .filter-panel { gap: 12px; }
   .insight-card.wide { display: block; }
   .chart { margin-top: 24px; }
+  .market-visual img { height: 315px; }
+  .market-visual-copy { max-width: 86%; padding: 24px; }
   .posting-card { grid-template-columns: 1fr; }
   .posting-actions { justify-content: space-between; }
   .callout { align-items: start; flex-wrap: wrap; }
