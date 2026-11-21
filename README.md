@@ -6,12 +6,23 @@ FDA Job Watcher is a daily, public job-market tracker for the Financial Data Ana
 
 ## Current project choices
 
-- **Role rule:** finance only. A title matches when it contains finance-specific language such as finance, financial analyst, FP&A, investment banking, treasury, credit, valuation, portfolio, investment, accounting, controller, or finance-risk terms. Generic data analyst, analytics, and business-intelligence titles do not match. The rule lives in `jobwatcher/config.py`.
+- **Role rule:** US finance only, targeted to recent graduates and early-career candidates. A title must contain finance-specific language and an entry-level signal such as analyst, associate, coordinator, specialist, assistant, rotational, new graduate, or entry-level. Senior/manager/director titles and roles requiring three or more years are excluded. Generic data analyst, analytics, and business-intelligence titles do not match. The rule lives in `jobwatcher/config.py`.
+- **Geography rule:** the website only displays explicit US locations or locations with a US state/DC marker. Ambiguous `Remote` postings are excluded unless the source says US/United States.
 - **Watch list:** 15 employers across Greenhouse and Ashby. The source ID, employer, ATS, and endpoint are all visible in `jobwatcher/config.py`; the normalizer also retains a tested Lever adapter for future replacements.
 - **Raw data:** `data/raw/YYYY-MM-DD/<source>.json.gz`. A failed source writes no raw file; its failure is recorded in `_status.json`.
 - **Canonical history:** `data/processed/history.json` (descriptions remain in compressed raw evidence so the browser file stays small).
 - **Run status:** `data/processed/status.json`.
 - **Published site data:** `site/data/history.json` and `site/data/status.json`.
+
+## Board and aggregator sources
+
+The current 15 ATS sources remain the reliable employer-level baseline. The pipeline also supports optional US job-board APIs:
+
+- **Adzuna:** set `ADZUNA_APP_ID` and `ADZUNA_APP_KEY`.
+- **Jooble:** set `JOOBLE_API_KEY` for the US Jooble API.
+- **USAJOBS:** set `USAJOBS_EMAIL` and `USAJOBS_API_KEY`.
+
+Add those values as GitHub Actions repository secrets; the pipeline automatically adds the corresponding sources when their secrets exist. The code does not scrape LinkedIn or Indeed HTML. Their official integrations require approved partner/API access rather than an anonymous public job-search JSON endpoint, so they should only be added if you obtain that access.
 
 ## Run locally
 

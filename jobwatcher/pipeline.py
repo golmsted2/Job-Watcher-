@@ -6,17 +6,48 @@ import argparse
 from datetime import datetime, timezone
 import gzip
 import json
+import os
 from pathlib import Path
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from .config import SOURCES, Source
+from .config import Source, configured_sources
 from .history import build_history, build_status, issue_body, write_json
 
 
 def fetch_json(source: Source, timeout: int = 60) -> list[dict]:
-    request = Request(source.endpoint, headers={"User-Agent": "FDA-Job-Watcher/0.1 (+GitHub Actions)"})
+    ats = source.ats.lower()
+    headers = {"User-Agent": "FDA-Job-Watcher/0.1 (+GitHub Actions)", "Accept": "application/json"}
+    if ats == "adzuna":
+        params = {
+            "app_id": os.environ["ADZUNA_APP_ID"],
+            "app_key": os.environ["ADZUNA_APP_KEY"],
+            "results_per_page": "100",
+            "what": "finance analyst",
+            "where": "United States",
+            "content-type": "application/json",
+        }
+        request = Request(f"{source.endpoint}?{urlencode(params)}", headers=headers)
+    elif ats == "jooble":
+        request = Request(
+            f"{source.endpoint.rstrip('/')}/{os.environ['JOOBLE_API_KEY']}",
+            data=json.dumps({"keywords": "finance analyst", "location": "United States", "page": 1, "ResultOnPage": 100}).encode("utf-8"),
+            headers={**headers, "Content-Type": "application/json"},
+            method="POST",
+        )
+    elif ats == "usajobs":
+        params = urlencode({"Keyword": "finance analyst", "LocationName": "United States", "ResultsPerPage": "500"})
+        request = Request(
+            f"{source.endpoint}?{params}",
+            headers={**headers, "User-Agent": os.environ["USAJOBS_EMAIL"], "Authorization-Key": os.environ["USAJOBS_API_KEY"]},
+        )
+    else:
+        request = Request(source.endpoint, headers=headers)
     with urlopen(request, timeout=timeout) as response:
         payload = json.loads(response.read().decode("utf-8"))
+    if ats == "usajobs":
+        items = payload.get("SearchResult", {}).get("SearchResultItems", [])
+        return [item.get("MatchedObjectDescriptor", item) for item in items]
     if isinstance(payload, list):
         return payload
     for key in ("jobs", "postings", "results", "data"):
@@ -58,8 +89,10 @@ def run_pipeline(
     raw_root: str | Path = "data/raw",
     processed_root: str | Path = "data/processed",
     site_data_root: str | Path = "site/data",
-    sources: tuple[Source, ...] = SOURCES,
+    sources: tuple[Source, ...] | None = None,
 ) -> dict:
+    if sources is None:
+        sources = configured_sources()
     day = run_date or datetime.now(timezone.utc).date().isoformat()
     run_utc = datetime.now(timezone.utc).isoformat()
     day_dir = Path(raw_root) / day

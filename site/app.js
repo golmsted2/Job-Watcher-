@@ -38,19 +38,19 @@ function renderToday({history, status}) {
   $("#run-date").textContent = fmtDate(status.latest_run_date);
   $("#run-time").textContent = status.run_utc ? new Intl.DateTimeFormat("en-US", {hour:"numeric", minute:"2-digit", timeZone:"UTC", timeZoneName:"short"}).format(new Date(status.run_utc)) : "UTC run time unavailable";
   $("#stat-days").textContent = status.successful_run_days ?? "—";
-  $("#stat-open").textContent = status.open_postings ?? history.filter((row) => !row.removed_date).length;
+  $("#stat-open").textContent = status.open_postings ?? history.filter((row) => !row.removed_date && row.is_us && row.in_role).length;
   $("#stat-new").textContent = status.new_today ?? 0;
   $("#stat-removed").textContent = status.removed_today ?? 0;
   $("#source-status").innerHTML = (status.sources || []).map((source) => `<div class="source-row"><div class="source-name"><span class="status-dot ${source.ok ? "" : "bad"}"></span><span>${escapeHtml(source.employer)}</span></div><span class="source-meta">${source.ok ? `${source.item_count} postings` : "source failed"}</span></div>`).join("") || `<p class="empty">No source status has been published yet.</p>`;
-  const newRows = history.filter((row) => row.first_seen === status.latest_run_date && !row.first_run).slice(0, 5);
-  const removedRows = history.filter((row) => row.removed_date === status.latest_run_date).slice(0, 5);
+  const newRows = history.filter((row) => row.first_seen === status.latest_run_date && !row.first_run && row.is_us && row.in_role).slice(0, 5);
+  const removedRows = history.filter((row) => row.removed_date === status.latest_run_date && row.is_us && row.in_role).slice(0, 5);
   const changeMarkup = (rows, removed = false) => rows.length ? rows.map((row) => `<div class="change-item ${removed ? "removed" : ""}"><a href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">${escapeHtml(row.title)}</a><span>${escapeHtml(row.employer)} · ${escapeHtml(row.location || "Location not listed")}</span></div>`).join("") : `<p class="empty">Nothing recorded.</p>`;
   $("#new-list").innerHTML = changeMarkup(newRows);
   $("#removed-list").innerHTML = changeMarkup(removedRows, true);
 }
 
 function renderBrowse({history}) {
-  const openRows = history.filter((row) => !row.removed_date);
+  const openRows = history.filter((row) => !row.removed_date && row.is_us);
   const employerSelect = $("#employer-filter");
   const locationSelect = $("#location-filter");
   [...new Set(openRows.map((row) => row.employer))].sort().forEach((value) => employerSelect.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`));
@@ -65,7 +65,7 @@ function renderBrowse({history}) {
     const sort = $("#sort-filter").value;
     rows.sort((a, b) => sort === "oldest" ? a.first_seen.localeCompare(b.first_seen) : sort === "employer" ? a.employer.localeCompare(b.employer) : b.first_seen.localeCompare(a.first_seen));
     $("#browse-count").textContent = rows.length;
-    $("#browse-summary").textContent = `${rows.length} ${rows.length === 1 ? "posting" : "postings"} · ${state.roleOnly ? "role match" : "all open postings"}`;
+    $("#browse-summary").textContent = `${rows.length} ${rows.length === 1 ? "posting" : "postings"} · ${state.roleOnly ? "finance / early-career match" : "all US postings"}`;
     $("#posting-list").innerHTML = rows.length ? rows.map((row) => `<article class="posting-card"><div><div class="posting-title"><a href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">${escapeHtml(row.title)}</a></div><div class="posting-detail">${escapeHtml(row.employer)} · ${escapeHtml(row.location || "Location not listed")} · first seen ${fmtDate(row.first_seen)}</div><div class="posting-tags"><span class="tag">${escapeHtml(row.team || "Team not listed")}</span><span class="tag muted">${escapeHtml(row.workplace_type || row.employment_type || "Details unavailable")}</span></div></div><div class="posting-actions"><button class="star ${state.favorites.has(row.posting_key) ? "saved" : ""}" data-key="${escapeHtml(row.posting_key)}" aria-label="Save ${escapeHtml(row.title)}">★</button><a class="apply-button" href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">View role</a></div></article>`).join("") : `<div class="panel"><p class="empty">No postings match these filters.</p></div>`;
     $$(".star").forEach((button) => button.addEventListener("click", () => { const key = button.dataset.key; state.favorites.has(key) ? state.favorites.delete(key) : state.favorites.add(key); localStorage.setItem("jobFavorites", JSON.stringify([...state.favorites])); render(); }));
   };
@@ -85,10 +85,11 @@ function horizontalChart(element, pairs) {
 }
 
 function renderMarket({history, status}) {
-  const dates = [...new Set(history.flatMap((row) => [row.first_seen, row.removed_date].filter(Boolean)))].sort();
+  const usHistory = history.filter((row) => row.is_us && row.in_role);
+  const dates = [...new Set(usHistory.flatMap((row) => [row.first_seen, row.removed_date].filter(Boolean)))].sort();
   $("#market-days").textContent = dates.length;
-  const newByDay = Object.entries(groupBy(history.filter((row) => row.first_seen && !row.first_run), (row) => row.first_seen)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
-  const removedByDay = Object.entries(groupBy(history.filter((row) => row.removed_date), (row) => row.removed_date)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
+  const newByDay = Object.entries(groupBy(usHistory.filter((row) => row.first_seen && !row.first_run), (row) => row.first_seen)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
+  const removedByDay = Object.entries(groupBy(usHistory.filter((row) => row.removed_date), (row) => row.removed_date)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
   barChart($("#new-chart"), newByDay, "teal");
   barChart($("#removed-chart"), removedByDay, "coral");
   const newCount = newByDay.reduce((sum, pair) => sum + pair[1], 0);
@@ -97,9 +98,9 @@ function renderMarket({history, status}) {
   $("#new-explain").textContent = "The chart excludes the first-run inventory, so this is the flow observed after watching began.";
   $("#removed-finding").textContent = `${removedCount} postings have left the watch list.`;
   $("#removed-explain").textContent = "A removal is only recorded when that employer returned a successful, fresh board response.";
-  const openByEmployer = Object.entries(groupBy(history.filter((row) => !row.removed_date), (row) => row.employer)).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]);
+  const openByEmployer = Object.entries(groupBy(usHistory.filter((row) => !row.removed_date), (row) => row.employer)).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]);
   horizontalChart($("#employer-chart"), openByEmployer);
-  const removedEligible = history.filter((row) => row.removed_date && !row.first_run && row.first_seen);
+  const removedEligible = usHistory.filter((row) => row.removed_date && !row.first_run && row.first_seen);
   const durations = removedEligible.map((row) => daysBetween(row.first_seen, row.removed_date)).sort((a, b) => a - b);
   const median = durations.length ? durations[Math.floor(durations.length / 2)] : 0;
   $("#days-finding").textContent = `The median role lasted ${median} days.`;
@@ -111,7 +112,7 @@ function renderMarket({history, status}) {
   $("#share-finding").textContent = `${share}% were removed within seven days.`;
   $("#share-explain").textContent = "The denominator is limited to non-first-run roles old enough to qualify for the comparison.";
   $("#share-stat").textContent = `${share}%`;
-  const locations = Object.entries(groupBy(history.filter((row) => !row.removed_date), (row) => row.location || "Not listed")).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const locations = Object.entries(groupBy(usHistory.filter((row) => !row.removed_date), (row) => row.location || "Not listed")).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]).slice(0, 5);
   horizontalChart($("#location-chart"), locations);
 }
 

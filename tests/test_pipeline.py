@@ -13,7 +13,7 @@ def test_pipeline_continues_after_one_source_fails(tmp_path, monkeypatch):
     def fake_fetch(source):
         if source.id == "airbnb":
             raise RuntimeError("blocked")
-        return [{"id": "1", "title": "Financial Analyst", "location": {"name": "Remote"}, "absolute_url": "https://example.test/1"}]
+        return [{"id": "1", "title": "Financial Analyst", "location": {"name": "New York, NY"}, "absolute_url": "https://example.test/1"}]
 
     monkeypatch.setattr(pipeline, "fetch_json", fake_fetch)
     raw = tmp_path / "raw"

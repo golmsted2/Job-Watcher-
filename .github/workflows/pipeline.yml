@@ -20,6 +20,12 @@ jobs:
         with:
           python-version: "3.12"
       - name: Collect sources and rebuild data
+        env:
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          USAJOBS_EMAIL: ${{ secrets.USAJOBS_EMAIL }}
+          USAJOBS_API_KEY: ${{ secrets USAJOBS_API_KEY }}
         run: python -m jobwatcher.pipeline --date "$(date -u +%F)"
       - name: Close previous issues and open today's issue
         env:

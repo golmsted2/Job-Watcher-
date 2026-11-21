@@ -97,15 +97,17 @@ def build_status(raw_root: str | Path, history: list[dict[str, Any]], now: datet
     latest_date = latest.get("run_date", "")
     successful_days = {item.get("run_date") for item in statuses if item.get("pipeline_ok", True)} - {None, ""}
     raw_days = [item.get("run_date") for item in statuses if item.get("raw_file_count", 0) > 0]
-    open_rows = [row for row in history if not row["removed_date"]]
-    new_today = [row for row in history if row["first_seen"] == latest_date and not row["first_run"]]
-    removed_today = [row for row in history if row["removed_date"] == latest_date]
+    open_us_rows = [row for row in history if not row["removed_date"] and row.get("is_us", False)]
+    open_rows = [row for row in open_us_rows if row.get("in_role", False)]
+    new_today = [row for row in history if row["first_seen"] == latest_date and not row["first_run"] and row.get("is_us", False) and row.get("in_role", False)]
+    removed_today = [row for row in history if row["removed_date"] == latest_date and row.get("is_us", False) and row.get("in_role", False)]
     return {
         "run_utc": (now or datetime.now(timezone.utc)).isoformat(),
         "latest_run_date": latest_date,
         "earliest_raw_date": min(raw_days) if raw_days else "",
         "successful_run_days": len(successful_days),
         "open_postings": len(open_rows),
+        "open_us_postings": len(open_us_rows),
         "new_today": len(new_today),
         "removed_today": len(removed_today),
         "first_run_postings": sum(1 for row in history if row["first_run"]),
@@ -120,8 +122,8 @@ def write_json(path: str | Path, payload: Any) -> None:
 
 
 def issue_body(history: list[dict[str, Any]], run_date: str) -> str:
-    new_rows = [row for row in history if row["first_seen"] == run_date and not row["first_run"]]
-    removed_rows = [row for row in history if row["removed_date"] == run_date]
+    new_rows = [row for row in history if row["first_seen"] == run_date and not row["first_run"] and row.get("is_us", False) and row.get("in_role", False)]
+    removed_rows = [row for row in history if row["removed_date"] == run_date and row.get("is_us", False) and row.get("in_role", False)]
 
     def section(title: str, rows: list[dict[str, Any]]) -> str:
         lines = [f"## {title}", ""]

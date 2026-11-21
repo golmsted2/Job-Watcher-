@@ -1,9 +1,10 @@
 {
-  "run_utc": "2026-11-21T00:14:33.138121+00:00",
+  "run_utc": "2026-11-21T00:25:05.791498+00:00",
   "latest_run_date": "2026-11-20",
   "earliest_raw_date": "2026-11-20",
   "successful_run_days": 1,
-  "open_postings": 3913,
+  "open_postings": 10,
+  "open_us_postings": 1557,
   "new_today": 0,
   "removed_today": 0,
   "first_run_postings": 3913,
