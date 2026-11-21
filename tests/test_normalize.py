@@ -44,6 +44,9 @@ def test_lever_categories_and_epoch_timestamp_are_normalized():
 
 def test_role_rule_is_explicit_and_case_insensitive():
     assert is_in_role("VP, FP&A")
-    assert is_in_role("Business Intelligence Manager")
+    assert is_in_role("Senior Financial Analyst")
+    assert is_in_role("Credit Risk Analyst")
+    assert not is_in_role("Business Intelligence Manager")
+    assert not is_in_role("Data Analyst")
     assert not is_in_role("Senior Product Designer")
 

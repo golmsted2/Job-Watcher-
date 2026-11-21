@@ -41,14 +41,14 @@ SOURCES = (
 # posting after source-specific normalization, including postings outside the
 # target role so Browse can offer an "all postings" view.
 ROLE_RULE_DESCRIPTION = (
-    "A posting is in-role when its title contains analyst, analytics, finance, "
-    "risk, treasury, pricing, FP&A, business intelligence, investment banking, "
-    "or data-science language."
+    "A posting is in-role when its title contains finance-specific language such "
+    "as finance, financial analyst, FP&A, investment banking, treasury, credit, "
+    "valuation, portfolio, investment, accounting, controller, or finance-risk terms."
 )
 ROLE_TERMS = re.compile(
-    r"\b(?:analyst|analytics|finance|financial|risk|treasury|pricing|fp&a|"
-    r"business intelligence|investment banking|data scientist|data science|"
-    r"quantitative)\b",
+    r"\b(?:finance|financial|fp&a|corporate finance|investment banking|"
+    r"treasury|credit|credit risk|financial risk|risk management|valuation|"
+    r"portfolio|investment|accounting|accountant|controller|quantitative finance)\b",
     re.IGNORECASE,
 )
 

@@ -6,7 +6,7 @@ FDA Job Watcher is a daily, public job-market tracker for the Financial Data Ana
 
 ## Current project choices
 
-- **Role rule:** a title matches when it contains analyst, analytics, finance, financial, risk, treasury, pricing, FP&A, business intelligence, investment banking, data scientist, data science, or quantitative language. The rule lives in `jobwatcher/config.py`.
+- **Role rule:** finance only. A title matches when it contains finance-specific language such as finance, financial analyst, FP&A, investment banking, treasury, credit, valuation, portfolio, investment, accounting, controller, or finance-risk terms. Generic data analyst, analytics, and business-intelligence titles do not match. The rule lives in `jobwatcher/config.py`.
 - **Watch list:** 15 employers across Greenhouse and Ashby. The source ID, employer, ATS, and endpoint are all visible in `jobwatcher/config.py`; the normalizer also retains a tested Lever adapter for future replacements.
 - **Raw data:** `data/raw/YYYY-MM-DD/<source>.json.gz`. A failed source writes no raw file; its failure is recorded in `_status.json`.
 - **Canonical history:** `data/processed/history.json` (descriptions remain in compressed raw evidence so the browser file stays small).
@@ -26,6 +26,12 @@ uv run python -m jobwatcher.pipeline --date 2026-11-20
 The pipeline calls every enabled source, continues after individual failures, writes raw snapshots, rebuilds history from raw files alone, updates the two processed files, and writes the daily issue body to `data/processed/issue.md`.
 
 To preview the site, serve the `site` directory with any static HTTP server. The site has a built-in demo fallback when opened directly from disk, but a local server is needed to test the service worker and published JSON files.
+
+After changing the role rule, rebuild the existing raw evidence without refetching employers:
+
+```text
+uv run python -m jobwatcher.pipeline --build-only
+```
 
 ## Site pages
 

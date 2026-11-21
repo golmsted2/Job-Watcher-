@@ -31,6 +31,27 @@ def _write_gzip_json(path: Path, payload: dict) -> None:
         json.dump(payload, handle, ensure_ascii=False)
 
 
+def build_outputs(
+    *,
+    raw_root: str | Path = "data/raw",
+    processed_root: str | Path = "data/processed",
+    site_data_root: str | Path = "site/data",
+) -> dict:
+    """Rebuild published files from raw evidence without calling employers."""
+
+    history = build_history(raw_root)
+    status = build_status(raw_root, history)
+    processed = Path(processed_root)
+    site_data = Path(site_data_root)
+    write_json(processed / "history.json", history)
+    write_json(processed / "status.json", status)
+    write_json(site_data / "history.json", history)
+    write_json(site_data / "status.json", status)
+    issue_date = status.get("latest_run_date") or datetime.now(timezone.utc).date().isoformat()
+    (processed / "issue.md").write_text(issue_body(history, issue_date), encoding="utf-8")
+    return status
+
+
 def run_pipeline(
     *,
     run_date: str | None = None,
@@ -79,23 +100,15 @@ def run_pipeline(
         "sources": statuses,
     })
 
-    history = build_history(raw_root)
-    status = build_status(raw_root, history)
-    processed = Path(processed_root)
-    site_data = Path(site_data_root)
-    write_json(processed / "history.json", history)
-    write_json(processed / "status.json", status)
-    write_json(site_data / "history.json", history)
-    write_json(site_data / "status.json", status)
-    (processed / "issue.md").write_text(issue_body(history, day), encoding="utf-8")
-    return status
+    return build_outputs(raw_root=raw_root, processed_root=processed_root, site_data_root=site_data_root)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--date", help="UTC run date in YYYY-MM-DD format")
+    parser.add_argument("--build-only", action="store_true", help="rebuild outputs from existing raw files without fetching")
     args = parser.parse_args()
-    status = run_pipeline(run_date=args.date)
+    status = build_outputs() if args.build_only else run_pipeline(run_date=args.date)
     print(json.dumps(status, indent=2))
 
 
