@@ -7,9 +7,9 @@ FDA Job Watcher is a daily, public job-market tracker for the Financial Data Ana
 ## Current project choices
 
 - **Role rule:** a title matches when it contains analyst, analytics, finance, financial, risk, treasury, pricing, FP&A, business intelligence, investment banking, data scientist, data science, or quantitative language. The rule lives in `jobwatcher/config.py`.
-- **Watch list:** 15 employers across Greenhouse, Lever, and Ashby. The source ID, employer, ATS, and endpoint are all visible in `jobwatcher/config.py`.
+- **Watch list:** 15 employers across Greenhouse and Ashby. The source ID, employer, ATS, and endpoint are all visible in `jobwatcher/config.py`; the normalizer also retains a tested Lever adapter for future replacements.
 - **Raw data:** `data/raw/YYYY-MM-DD/<source>.json.gz`. A failed source writes no raw file; its failure is recorded in `_status.json`.
-- **Canonical history:** `data/processed/history.json`.
+- **Canonical history:** `data/processed/history.json` (descriptions remain in compressed raw evidence so the browser file stays small).
 - **Run status:** `data/processed/status.json`.
 - **Published site data:** `site/data/history.json` and `site/data/status.json`.
 

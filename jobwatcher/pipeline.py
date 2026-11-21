@@ -59,7 +59,11 @@ def run_pipeline(
         }
         try:
             jobs = fetch_json(source)
-            _write_gzip_json(day_dir / f"{source.id}.json.gz", {"source": source.id, "run_date": day, "jobs": jobs})
+            _write_gzip_json(day_dir / f"{source.id}.json.gz", {
+                "source": {"id": source.id, "employer": source.employer, "ats": source.ats, "endpoint": source.endpoint},
+                "run_date": day,
+                "jobs": jobs,
+            })
             status["ok"] = True
             status["item_count"] = len(jobs)
             raw_file_count += 1

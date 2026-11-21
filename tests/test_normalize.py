@@ -1,4 +1,4 @@
-from jobwatcher.config import SOURCE_BY_ID, is_in_role
+from jobwatcher.config import SOURCE_BY_ID, Source, is_in_role
 from jobwatcher.normalize import normalize_posting
 
 
@@ -33,7 +33,7 @@ def test_lever_categories_and_epoch_timestamp_are_normalized():
             "hostedUrl": "https://example.test/abc",
             "createdAt": 0,
         },
-        SOURCE_BY_ID["netlify"],
+        Source("lever-test", "Lever Test Employer", "Lever", "https://example.test/lever"),
     )
 
     assert row["source_id"] == "abc"

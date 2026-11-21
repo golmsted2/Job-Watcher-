@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .config import SOURCE_BY_ID
+from .config import SOURCE_BY_ID, Source
 from .normalize import normalize_posting
 
 
@@ -42,10 +42,25 @@ def build_history(raw_root: str | Path) -> list[dict[str, Any]]:
         for source_id, path in raw_files.items():
             first_successful_day.setdefault(source_id, day)
             envelope = _read_json(path)
-            source = SOURCE_BY_ID[source_id]
+            source_meta = envelope.get("source")
+            if isinstance(source_meta, dict):
+                source = Source(
+                    source_meta["id"],
+                    source_meta["employer"],
+                    source_meta["ats"],
+                    source_meta.get("endpoint", ""),
+                )
+            else:
+                # Compatibility for snapshots written before source metadata
+                # was embedded in each raw file.
+                source = SOURCE_BY_ID[source_id]
             listed_keys: set[str] = set()
             for raw_posting in envelope.get("jobs", []):
                 normalized = normalize_posting(raw_posting, source)
+                # Descriptions stay in the compressed raw evidence.  The site
+                # never displays them, so excluding them from history keeps
+                # browser downloads small while preserving reproducibility.
+                normalized.pop("description", None)
                 key = normalized["posting_key"]
                 listed_keys.add(key)
                 if key not in records:
@@ -55,7 +70,7 @@ def build_history(raw_root: str | Path) -> list[dict[str, Any]]:
                     records[key] = normalized
                 else:
                     record = records[key]
-                    for field in ("title", "location", "team", "employment_type", "workplace_type", "description", "apply_url", "posted_at", "in_role"):
+                    for field in ("title", "location", "team", "employment_type", "workplace_type", "apply_url", "posted_at", "in_role"):
                         if normalized[field]:
                             record[field] = normalized[field]
                     record["last_seen"] = day
