@@ -119,6 +119,19 @@ function annualSalary(row) {
   return {low, high, period:row.salary_period || (low || high ? "year" : "unknown")};
 }
 
+function salaryMatches(row, selection) {
+  if (!selection) return true;
+  const salary = annualSalary(row);
+  if (selection === "listed") return Boolean(salary.low || salary.high);
+  const low = salary.low || salary.high;
+  const high = salary.high || salary.low;
+  if (!low && !high) return false;
+  if (/^\d+$/.test(selection)) return high >= Number(selection);
+  if (selection.endsWith("+")) return high >= Number(selection.slice(0, -1));
+  const [minimum, maximum] = selection.split("-").map(Number);
+  return high >= minimum && low < maximum;
+}
+
 function normalizedSalaryLabel(row) {
   const salary = annualSalary(row);
   if (!salary.low && !salary.high) return "Salary not listed";
@@ -159,7 +172,7 @@ function searchMatches(row, search) {
   const title = String(row.title || "").toLowerCase();
   const employer = String(row.employer || "").toLowerCase();
   const query = String(search.query || "").toLowerCase();
-  return (!query || title.includes(query) || employer.includes(query)) && (!search.employer || row.employer === search.employer) && (!search.location || row.location === search.location) && (!search.program || programType(row) === search.program) && (!search.stage || (search.stage === "internship" ? row.is_internship : search.stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!search.workplace || workplace(row).toLowerCase() === search.workplace) && (!search.sponsorship || row.sponsorship === search.sponsorship) && (!search.degree || row.degree_requirement === search.degree) && (!search.salary || (search.salary === "listed" ? annualSalary(row).low > 0 : annualSalary(row).high >= Number(search.salary))) && (!search.remoteOnly || workplace(row) === "Remote");
+  return (!query || title.includes(query) || employer.includes(query)) && (!search.employer || row.employer === search.employer) && (!search.location || row.location === search.location) && (!search.program || programType(row) === search.program) && (!search.stage || (search.stage === "internship" ? row.is_internship : search.stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!search.workplace || workplace(row).toLowerCase() === search.workplace) && (!search.sponsorship || row.sponsorship === search.sponsorship) && (!search.degree || row.degree_requirement === search.degree) && salaryMatches(row, search.salary) && (!search.remoteOnly || workplace(row) === "Remote");
 }
 
 function currentSearch() {
@@ -249,8 +262,7 @@ function renderBrowse({history, status}) {
     let rows = openRows.filter((row) => {
       const app = applicationFor(state.applications, row.posting_key);
       const rowModel = workplace(row).toLowerCase();
-      const salaryKnown = annualSalary(row).low || annualSalary(row).high;
-      return (!state.roleOnly || row.in_role) && (!employerSelect.value || row.employer === employerSelect.value) && (!locationSelect.value || row.location === locationSelect.value) && (!titleQuery || String(row.title).toLowerCase().includes(titleQuery)) && (!stage || (stage === "internship" ? row.is_internship : stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!program || programType(row) === program) && (!model || rowModel === model) && (!sponsorship || row.sponsorship === sponsorship) && (!degree || row.degree_requirement === degree) && (!salary || (salary === "listed" ? salaryKnown : annualSalary(row).high >= Number(salary))) && (!tracking || (tracking === "saved" ? state.favorites.has(row.posting_key) : tracking === "not-started" ? app.status === "Not started" : app.status === tracking));
+      return (!state.roleOnly || row.in_role) && (!employerSelect.value || row.employer === employerSelect.value) && (!locationSelect.value || row.location === locationSelect.value) && (!titleQuery || String(row.title).toLowerCase().includes(titleQuery)) && (!stage || (stage === "internship" ? row.is_internship : stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!program || programType(row) === program) && (!model || rowModel === model) && (!sponsorship || row.sponsorship === sponsorship) && (!degree || row.degree_requirement === degree) && salaryMatches(row, salary) && (!tracking || (tracking === "saved" ? state.favorites.has(row.posting_key) : tracking === "not-started" ? app.status === "Not started" : app.status === tracking));
     });
     const age = Number($("#days-filter").value || 0);
     if (age) rows = rows.filter((row) => daysBetween(row.first_seen, latestDate) >= age);
