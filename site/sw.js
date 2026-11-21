@@ -1,5 +1,5 @@
-const CACHE = "fda-job-watcher-v3";
-const SHELL = ["./", "./index.html", "./browse.html", "./companies.html", "./market.html", "./styles.css", "./app.js", "./manifest.webmanifest"];
+const CACHE = "fda-job-watcher-v4";
+const SHELL = ["./", "./index.html", "./browse.html", "./job.html", "./compare.html", "./companies.html", "./workspace.html", "./market.html", "./styles.css", "./app.js", "./manifest.webmanifest"];
 self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting())));
 self.addEventListener("activate", (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", (event) => {

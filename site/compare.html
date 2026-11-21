@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1b2a">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Job Watcher · Compare</title>
+</head>
+<body data-page="compare">
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
+    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a href="./browse.html">Browse</a><a href="./companies.html">Companies</a><a href="./workspace.html">Workspace</a><a href="./market.html">Market</a></nav>
+    <span class="offline-pill" id="network-status">Online-ready</span>
+  </header>
+  <main class="page-shell">
+    <section class="hero compact-hero"><div><p class="eyebrow">Decision view · up to three roles</p><h1>Compare the <em>trade-offs.</em></h1><p class="lede">Put salary, fit, location, program type, and freshness in one view.</p></div></section>
+    <section id="compare-table" aria-live="polite"><div class="panel"><p class="empty">Loading comparison…</p></div></section>
+  </main>
+  <footer class="footer"><span>FDA Job Watcher</span><span>Comparison selections stay on this device.</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>

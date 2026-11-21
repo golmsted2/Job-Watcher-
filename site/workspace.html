@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1b2a">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Job Watcher · Workspace</title>
+</head>
+<body data-page="workspace">
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
+    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a href="./browse.html">Browse</a><a href="./companies.html">Companies</a><a class="active" href="./workspace.html">Workspace</a><a href="./market.html">Market</a></nav>
+    <span class="offline-pill" id="network-status">Online-ready</span>
+  </header>
+  <main class="page-shell">
+    <section class="hero compact-hero"><div><p class="eyebrow">Your local command center</p><h1>Make the search <em>yours.</em></h1><p class="lede">Save searches, tune your profile, track applications, and export your workspace whenever you want to move devices.</p></div><div class="hero-number workspace-summary" id="workspace-summary">Loading…</div></section>
+    <section id="workspace-stats" class="metric-grid" aria-label="Application analytics"></section>
+    <section class="workspace-grid">
+      <article class="panel workspace-panel"><div class="panel-heading"><div><p class="eyebrow">Application plan</p><h2>Deadlines and reminders</h2></div></div><div id="deadline-list" class="deadline-list"></div></article>
+      <article class="panel workspace-panel"><div class="panel-heading"><div><p class="eyebrow">Saved search alerts</p><h2>What’s new for you</h2></div><span class="live-dot"></span></div><div id="saved-search-list" class="saved-search-list"></div></article>
+    </section>
+    <section class="workspace-grid">
+      <article class="panel workspace-panel profile-panel"><div class="panel-heading"><div><p class="eyebrow">Profile matching</p><h2>Bring your resume context.</h2></div></div><p id="profile-match-summary" class="muted-copy"></p><label>Your name<input id="profile-name" type="text" autocomplete="name" placeholder="Optional"></label><label>Skills, comma-separated<input id="profile-skills" type="text" placeholder="Excel, SQL, valuation"></label><label>Resume text file<input id="resume-file" type="file" accept=".txt,.md,.text"></label><label>Resume text<textarea id="resume-text" rows="6" placeholder="Paste resume text or load a .txt/.md file"></textarea></label><div class="toggle-stack"><label class="toggle-label"><input id="notification-toggle" type="checkbox"><span class="toggle"></span><span>Show browser alert hints</span></label><label class="toggle-label"><input id="digest-toggle" type="checkbox"><span class="toggle"></span><span>Include saved searches in digest planning</span></label></div><div class="workspace-actions"><button class="button button-dark" id="save-profile" type="button">Save profile</button><button class="secondary-button" id="enable-notifications" type="button">Enable browser alerts</button><span class="form-feedback" id="profile-feedback"></span></div></article>
+      <article class="panel workspace-panel"><div class="panel-heading"><div><p class="eyebrow">Portable profile</p><h2>Sync without an account.</h2></div></div><p class="muted-copy">This public static site stores your workspace in this browser. Export a backup to move favorites, notes, deadlines, saved searches, and profile matching to another device.</p><div class="workspace-actions"><button class="secondary-button" id="export-profile" type="button">Export workspace</button><label class="file-button">Import workspace<input id="import-profile" type="file" accept="application/json"></label></div><div class="privacy-note">No resume text or application notes are uploaded by this site.</div></article>
+    </section>
+    <section class="panel workspace-panel"><div class="panel-heading"><div><p class="eyebrow">Location intelligence</p><h2>Where the market is concentrated.</h2></div></div><p class="muted-copy">Cost bands are planning signals, not financial advice. Listed salary averages only use roles that publish a range.</p><div id="location-map" class="location-map" aria-label="US job concentration map"></div><div id="location-insights" class="location-insights"></div></section>
+  </main>
+  <footer class="footer"><span>FDA Job Watcher</span><span>Local workspace · export anytime</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>

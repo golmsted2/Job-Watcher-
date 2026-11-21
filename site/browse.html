@@ -11,7 +11,7 @@
 <body data-page="browse">
   <header class="topbar">
     <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
-    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a class="active" href="./browse.html">Browse</a><a href="./companies.html">Companies</a><a href="./market.html">Market</a></nav>
+    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a class="active" href="./browse.html">Browse</a><a href="./companies.html">Companies</a><a href="./workspace.html">Workspace</a><a href="./market.html">Market</a></nav>
     <span class="offline-pill" id="network-status">Online-ready</span>
   </header>
   <main class="page-shell">
@@ -21,6 +21,7 @@
       <label>Employer<select id="employer-filter"><option value="">All employers</option></select></label>
       <label>Location<select id="location-filter"><option value="">All locations</option></select></label>
       <label>Stage<select id="stage-filter"><option value="">All early-career</option><option value="new-grad">New grad / early career</option><option value="internship">Internship / campus</option></select></label>
+      <label>Program<select id="program-filter"><option value="">Any program</option><option value="Internship / campus">Internship / campus</option><option value="New graduate program">New graduate program</option><option value="Rotational / leadership">Rotational / leadership</option><option value="Entry-level">Entry-level</option></select></label>
       <label>Work model<select id="work-model-filter"><option value="">Any model</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option><option value="on-site">On-site</option></select></label>
       <label>Sponsorship<select id="sponsorship-filter"><option value="">Any sponsorship signal</option><option value="mentioned">Mentioned</option><option value="unknown">Not listed</option><option value="no">No sponsorship</option></select></label>
       <label>Degree<select id="degree-filter"><option value="">Any degree signal</option><option value="mentioned">Degree mentioned</option><option value="not-listed">Not listed</option></select></label>
@@ -29,8 +30,11 @@
       <label>Days open<select id="days-filter"><option value="">Any age</option><option value="7">7+ days</option><option value="14">14+ days</option><option value="30">30+ days</option></select></label>
       <label class="search-label">Search title<input id="title-search" type="search" placeholder="e.g. analyst"></label>
       <label>Sort<select id="sort-filter"><option value="newest">First seen · newest</option><option value="match">Match score</option><option value="salary">Highest salary</option><option value="oldest">First seen · oldest</option><option value="employer">Employer A–Z</option></select></label>
+      <label>Search name<input id="search-name" type="text" placeholder="e.g. Remote analyst"></label>
+      <button class="button button-dark filter-save" id="save-search" type="button">Save search</button>
     </section>
-    <div class="browse-toolbar"><span id="browse-summary">Loading postings…</span><span class="shortlist-note">★ saves to this browser</span></div>
+    <div class="browse-toolbar"><span id="browse-summary">Loading postings…</span><span class="shortlist-note" id="search-feedback">★ saves locally · profile matching is available in Workspace</span></div>
+    <div class="compare-bar"><span><strong id="compare-count">0</strong> jobs selected for comparison</span><a class="secondary-button" id="compare-link" href="./compare.html">Compare selected</a></div>
     <section id="posting-list" class="posting-list" aria-live="polite"></section>
   </main>
   <footer class="footer"><span>FDA Job Watcher</span><span>Shortlists stay on this device.</span></footer>

@@ -74,8 +74,10 @@ def build_history(raw_root: str | Path) -> list[dict[str, Any]]:
                     for field in (
                         "title", "location", "team", "employment_type", "workplace_type",
                         "salary_min", "salary_max", "salary_currency", "salary_text", "apply_url",
+                        "salary_period", "salary_annual_min", "salary_annual_max",
+                        "description_excerpt",
                         "posted_at", "in_role", "is_us", "is_internship", "is_new_grad",
-                        "sponsorship", "degree_requirement", "duplicate_key",
+                        "sponsorship", "degree_requirement", "program_type", "duplicate_key",
                     ):
                         if normalized[field]:
                             record[field] = normalized[field]

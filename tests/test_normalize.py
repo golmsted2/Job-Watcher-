@@ -135,7 +135,12 @@ def test_normalize_adds_salary_and_early_career_signals():
     assert row["salary_min"] == 72000
     assert row["salary_max"] == 88000
     assert row["salary_currency"] == "USD"
+    assert row["salary_period"] == "year"
+    assert row["salary_annual_min"] == 72000
+    assert row["salary_annual_max"] == 88000
     assert row["is_new_grad"] is True
+    assert row["program_type"] == "New graduate program"
+    assert row["description_excerpt"].startswith("Recent graduates")
     assert row["sponsorship"] == "mentioned"
     assert row["degree_requirement"] == "mentioned"
     assert row["duplicate_key"] == "test bank 2027 credit analyst program dallas tx"

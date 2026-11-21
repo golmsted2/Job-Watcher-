@@ -24,6 +24,10 @@ CANONICAL_COLUMNS = (
     "salary_max",
     "salary_currency",
     "salary_text",
+    "salary_period",
+    "salary_annual_min",
+    "salary_annual_max",
+    "description_excerpt",
     "description",
     "apply_url",
     "posted_at",
@@ -36,6 +40,7 @@ CANONICAL_COLUMNS = (
     "is_new_grad",
     "sponsorship",
     "degree_requirement",
+    "program_type",
     "duplicate_key",
     "first_run",
 )
@@ -151,11 +156,35 @@ def _salary(raw: dict[str, Any], ats: str) -> tuple[float | None, float | None, 
 
     if not currency and (minimum is not None or maximum is not None or "$" in text):
         currency = "USD"
+    if text and re.fullmatch(r"\s*\d[\d,]*(?:\.\d+)?\s*(?:[A-Za-z]+)?\s*", text):
+        low = f"${minimum:,.0f}" if minimum is not None else ""
+        high = f"${maximum:,.0f}" if maximum is not None else ""
+        text = f"{low}–{high}" if low and high and low != high else (low or high)
     if not text and (minimum is not None or maximum is not None):
         low = f"${minimum:,.0f}" if minimum is not None else ""
         high = f"${maximum:,.0f}" if maximum is not None else ""
         text = f"{low}–{high}" if low and high and low != high else (low or high)
     return minimum, maximum, currency, text
+
+
+def _salary_period(text: str, minimum: float | None, maximum: float | None) -> str:
+    value = text.lower()
+    if re.search(r"\b(?:hour|hourly)\b", value):
+        return "hour"
+    if re.search(r"\b(?:week|weekly)\b", value):
+        return "week"
+    if re.search(r"\b(?:month|monthly)\b", value):
+        return "month"
+    if re.search(r"\b(?:year|annual|annually|salary)\b", value):
+        return "year"
+    # Employer salary bands without an interval are normally annual ranges.
+    return "year" if minimum is not None or maximum is not None else "unknown"
+
+
+def _annualize(value: float | None, period: str) -> float | None:
+    if value is None:
+        return None
+    return value * {"hour": 2080, "week": 52, "month": 12, "year": 1}.get(period, 1)
 
 
 def _signals(title: str, description: str, workplace_type: str) -> tuple[bool, bool, str, str]:
@@ -173,6 +202,17 @@ def _signals(title: str, description: str, workplace_type: str) -> tuple[bool, b
     else:
         degree = "not-listed"
     return internship, new_grad, sponsorship, degree
+
+
+def _program_type(title: str, description: str, is_internship: bool, is_new_grad: bool) -> str:
+    text = f"{title} {description}".lower()
+    if is_internship:
+        return "Internship / campus"
+    if re.search(r"\b(?:rotational|rotation|development program|leadership program)\b", text):
+        return "Rotational / leadership"
+    if re.search(r"\b(?:analyst program|new grad(?:uate)?|early career|campus|university)\b", text) or is_new_grad:
+        return "New graduate program"
+    return "Entry-level"
 
 
 def _duplicate_key(employer: str, title: str, location: str) -> str:
@@ -357,7 +397,11 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         workplace_match = re.search(r"\b(remote|hybrid|on[- ]?site)\b", f"{title} {location} {description}", re.IGNORECASE)
         workplace_type = workplace_match.group(1).title() if workplace_match else ""
     salary_min, salary_max, salary_currency, salary_text = _salary(raw, ats)
+    salary_period = _salary_period(salary_text, salary_min, salary_max)
+    salary_annual_min = _annualize(salary_min, salary_period)
+    salary_annual_max = _annualize(salary_max, salary_period)
     is_internship, is_new_grad, sponsorship, degree_requirement = _signals(title, description, workplace_type)
+    program_type = _program_type(title, description, is_internship, is_new_grad)
     return {
         "posting_key": f"{source.id}:{source_id}",
         "employer": employer,
@@ -372,6 +416,10 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         "salary_max": salary_max,
         "salary_currency": salary_currency,
         "salary_text": salary_text,
+        "salary_period": salary_period,
+        "salary_annual_min": salary_annual_min,
+        "salary_annual_max": salary_annual_max,
+        "description_excerpt": description[:450],
         "description": description,
         "apply_url": apply_url,
         "posted_at": posted_at,
@@ -384,6 +432,7 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         "is_new_grad": is_new_grad,
         "sponsorship": sponsorship,
         "degree_requirement": degree_requirement,
+        "program_type": program_type,
         "duplicate_key": _duplicate_key(employer, title, location),
         "first_run": False,
     }

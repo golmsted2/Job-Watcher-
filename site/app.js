@@ -6,6 +6,25 @@ const DEMO_HISTORY = [
 ];
 const DEMO_STATUS = {run_utc:"2026-11-20T13:00:00Z", latest_run_date:"2026-11-20", earliest_raw_date:"2026-11-01", successful_run_days:20, open_postings:4, new_today:1, removed_today:0, first_run_postings:2, sources:[]};
 const APPLICATION_STATUSES = ["Not started", "Saved", "Applied", "Interview", "Offer", "Closed"];
+const PROGRAM_TYPES = ["Internship / campus", "New graduate program", "Rotational / leadership", "Entry-level"];
+const COST_BANDS = {
+  "NY": {label:"New York area", band:"High", index:145}, "CA": {label:"California", band:"High", index:139},
+  "MA": {label:"Boston area", band:"High", index:132}, "DC": {label:"Washington, DC", band:"High", index:128},
+  "WA": {label:"Seattle area", band:"High", index:126}, "IL": {label:"Chicago area", band:"Medium-high", index:108},
+  "TX": {label:"Texas", band:"Medium", index:96}, "NC": {label:"North Carolina", band:"Medium", index:94},
+  "MO": {label:"Missouri", band:"Medium-low", index:89}, "PA": {label:"Pennsylvania", band:"Medium-low", index:90},
+  "OH": {label:"Ohio", band:"Medium-low", index:88}, "FL": {label:"Florida", band:"Medium", index:101},
+  "MN": {label:"Minnesota", band:"Medium", index:98}, "CO": {label:"Colorado", band:"Medium-high", index:112},
+  "VA": {label:"Virginia", band:"Medium-high", index:108}, "GA": {label:"Georgia", band:"Medium-low", index:92}
+};
+const MAP_POINTS = {NY:[83,67], CA:[20,116], MA:[88,53], DC:[78,84], WA:[18,28], IL:[57,78], TX:[46,135], NC:[75,103], MO:[52,91], PA:[72,72], OH:[67,77], FL:[76,151], MN:[50,48], CO:[40,91], VA:[75,91], GA:[68,122]};
+const SKILL_ALIASES = {
+  excel:"Excel", sql:"SQL", python:"Python", tableau:"Tableau", powerbi:"Power BI", "power bi":"Power BI",
+  accounting:"Accounting", fpya:"FP&A", "fp&a":"FP&A", finance:"Finance", financial:"Finance",
+  valuation:"Valuation", modeling:"Financial modeling", "financial modeling":"Financial modeling",
+  risk:"Risk", credit:"Credit", investment:"Investments", banking:"Banking", payments:"Payments",
+  bloomberg:"Bloomberg", salesforce:"Salesforce", communication:"Communication", leadership:"Leadership"
+};
 const COMPANY_PROFILES = {
   "Edward Jones": {focus:"Branch, wealth management, operations, and financial planning careers.", ats:"MCloud"},
   "Stifel": {focus:"Wealth management, investment banking, capital markets, and client service.", ats:"Jibe"},
@@ -94,6 +113,70 @@ function salaryLabel(row) {
   return low && high && low !== high ? `${low}–${high}` : low || high || "Salary not listed";
 }
 
+function annualSalary(row) {
+  const low = Number(row.salary_annual_min || row.salary_min || 0);
+  const high = Number(row.salary_annual_max || row.salary_max || 0);
+  return {low, high, period:row.salary_period || (low || high ? "year" : "unknown")};
+}
+
+function normalizedSalaryLabel(row) {
+  const salary = annualSalary(row);
+  if (!salary.low && !salary.high) return "Salary not listed";
+  const low = salary.low ? `$${Math.round(salary.low).toLocaleString("en-US")}` : "";
+  const high = salary.high ? `$${Math.round(salary.high).toLocaleString("en-US")}` : "";
+  return low && high && low !== high ? `${low}–${high} annualized` : `${low || high} annualized`;
+}
+
+function programType(row) {
+  return row.program_type || (row.is_internship ? "Internship / campus" : row.is_new_grad ? "New graduate program" : "Entry-level");
+}
+
+function locationProfile(location) {
+  const value = String(location || "");
+  const match = value.match(/(?:,|\s)\s*([A-Z]{2})(?:\b|\s|,)/);
+  const profile = match && COST_BANDS[match[1]] ? COST_BANDS[match[1]] : null;
+  return profile ? {...profile, state:match[1]} : {label:"US location", band:"Not available", index:null, state:""};
+}
+
+function profileData() {
+  return storage.get("jobProfile", {name:"", skills:[], resumeText:"", weeklyDigest:true, browserAlerts:true});
+}
+
+function extractSkills(text) {
+  const value = String(text || "").toLowerCase();
+  return [...new Set(Object.keys(SKILL_ALIASES).filter((skill) => value.includes(skill)).map((skill) => SKILL_ALIASES[skill]))];
+}
+
+function profileMatch(row, profile = profileData()) {
+  const skills = new Set([...(profile.skills || []), ...extractSkills(profile.resumeText || "")]);
+  if (!skills.size) return null;
+  const haystack = `${row.title} ${row.team} ${row.program_type || ""} ${row.salary_text || ""}`.toLowerCase();
+  const hits = [...skills].filter((skill) => haystack.includes(skill.toLowerCase()));
+  return {score:Math.min(99, Math.round(45 + hits.length / Math.max(skills.size, 1) * 55)), hits};
+}
+
+function searchMatches(row, search) {
+  const title = String(row.title || "").toLowerCase();
+  const employer = String(row.employer || "").toLowerCase();
+  const query = String(search.query || "").toLowerCase();
+  return (!query || title.includes(query) || employer.includes(query)) && (!search.employer || row.employer === search.employer) && (!search.location || row.location === search.location) && (!search.program || programType(row) === search.program) && (!search.stage || (search.stage === "internship" ? row.is_internship : search.stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!search.workplace || workplace(row).toLowerCase() === search.workplace) && (!search.sponsorship || row.sponsorship === search.sponsorship) && (!search.degree || row.degree_requirement === search.degree) && (!search.salary || (search.salary === "listed" ? annualSalary(row).low > 0 : annualSalary(row).high >= Number(search.salary))) && (!search.remoteOnly || workplace(row) === "Remote");
+}
+
+function currentSearch() {
+  return {
+    query:$("#title-search")?.value || "",
+    employer:$("#employer-filter")?.value || "",
+    location:$("#location-filter")?.value || "",
+    stage:$("#stage-filter")?.value || "",
+    program:$("#program-filter")?.value || "",
+    workplace:$("#work-model-filter")?.value || "",
+    sponsorship:$("#sponsorship-filter")?.value || "",
+    degree:$("#degree-filter")?.value || "",
+    salary:$("#salary-filter")?.value === "listed" ? "listed" : $("#salary-filter")?.value === "100k" ? "100000" : "",
+    remoteOnly:false,
+  };
+}
+
 function fitScore(row) {
   let score = row.in_role ? 48 : 20;
   if (row.is_new_grad) score += 18;
@@ -107,7 +190,7 @@ function fitScore(row) {
 }
 
 function applicationFor(applications, key) {
-  return applications[key] || {status:"Not started", note:""};
+  return applications[key] || {status:"Not started", note:"", deadline:""};
 }
 
 function dedupeRows(rows) {
@@ -124,19 +207,22 @@ function postingCard(row, state, latestDate) {
   const app = applicationFor(state.applications, row.posting_key);
   const fresh = freshness(row, latestDate);
   const salary = salaryLabel(row);
+  const annualizedSalary = normalizedSalaryLabel(row);
+  const match = profileMatch(row, state.profile);
+  const verified = dateOnly(row.last_seen) === dateOnly(latestDate);
   const stage = row.is_internship ? "Internship" : row.is_new_grad ? "New grad / early career" : "Entry-level signal";
   const sponsorship = row.sponsorship === "mentioned" ? "Sponsorship mentioned" : row.sponsorship === "no" ? "No sponsorship" : "Sponsorship not listed";
   const degree = row.degree_requirement === "mentioned" ? "Degree mentioned" : "Degree not listed";
   return `<article class="posting-card">
     <div class="posting-main">
-      <div class="posting-topline"><span class="match-score">${fitScore(row)}% match</span><span class="freshness ${fresh.className}">${fresh.label}</span><span class="posted-label">seen ${fmtDate(row.last_seen || row.first_seen)}</span></div>
-      <div class="posting-title"><a href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">${escapeHtml(row.title)}</a></div>
-      <div class="posting-detail"><strong>${escapeHtml(row.employer)}</strong> · ${escapeHtml(row.location || "Location not listed")} · first seen ${fmtDate(row.first_seen)}</div>
-      <div class="posting-tags"><span class="tag">${escapeHtml(row.team || "Finance")}</span><span class="tag muted">${escapeHtml(workplace(row))}</span><span class="tag muted">${escapeHtml(stage)}</span><span class="tag muted">${escapeHtml(sponsorship)}</span><span class="tag muted">${escapeHtml(degree)}</span></div>
-      <div class="posting-meta"><span class="posting-salary ${salary === "Salary not listed" ? "salary-missing" : ""}">${escapeHtml(salary)}</span><span>Source: ${escapeHtml(row.source || "employer feed")}</span></div>
-      <div class="tracker-box"><label>Application status<select class="app-status" data-key="${escapeHtml(row.posting_key)}">${APPLICATION_STATUSES.map((status) => `<option ${status === app.status ? "selected" : ""}>${status}</option>`).join("")}</select></label><label>Private note<textarea class="app-note" data-key="${escapeHtml(row.posting_key)}" rows="1" placeholder="Add a reminder…">${escapeHtml(app.note)}</textarea></label></div>
+      <div class="posting-topline"><span class="match-score">${fitScore(row)}% fit</span>${match ? `<span class="profile-score">${match.score}% profile</span>` : ""}<span class="freshness ${fresh.className}">${verified ? "Verified today" : fresh.label}</span><span class="posted-label">seen ${fmtDate(row.last_seen || row.first_seen)}</span></div>
+      <div class="posting-title"><a href="./job.html?job=${encodeURIComponent(row.posting_key)}">${escapeHtml(row.title)}</a></div>
+      <div class="posting-detail"><strong>${escapeHtml(row.employer)}</strong> · ${escapeHtml(row.location || "Location not listed")} · ${escapeHtml(locationProfile(row.location).band)} cost band · first seen ${fmtDate(row.first_seen)}</div>
+      <div class="posting-tags"><span class="tag">${escapeHtml(row.team || "Finance")}</span><span class="tag muted">${escapeHtml(workplace(row))}</span><span class="tag muted">${escapeHtml(programType(row))}</span><span class="tag muted">${escapeHtml(sponsorship)}</span><span class="tag muted">${escapeHtml(degree)}</span></div>
+      <div class="posting-meta"><span class="posting-salary ${salary === "Salary not listed" ? "salary-missing" : ""}">${escapeHtml(salary)}</span>${salary !== annualizedSalary ? `<span class="salary-normalized">${escapeHtml(annualizedSalary)}</span>` : ""}<span>Source: ${escapeHtml(row.source || "employer feed")}</span></div>
+      <div class="tracker-box"><label>Application status<select class="app-status" data-key="${escapeHtml(row.posting_key)}">${APPLICATION_STATUSES.map((status) => `<option ${status === app.status ? "selected" : ""}>${status}</option>`).join("")}</select></label><label>Deadline<input class="app-deadline" data-key="${escapeHtml(row.posting_key)}" type="date" value="${escapeHtml(app.deadline || "")}"></label><label>Private note<textarea class="app-note" data-key="${escapeHtml(row.posting_key)}" rows="1" placeholder="Add a reminder…">${escapeHtml(app.note)}</textarea></label></div>
     </div>
-    <div class="posting-actions"><button class="star ${state.favorites.has(row.posting_key) ? "saved" : ""}" data-key="${escapeHtml(row.posting_key)}" aria-label="Save ${escapeHtml(row.title)}">★</button><a class="apply-button" href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">View role</a></div>
+    <div class="posting-actions"><label class="compare-check"><input type="checkbox" class="compare-toggle" data-key="${escapeHtml(row.posting_key)}" ${state.compare.has(row.posting_key) ? "checked" : ""}> Compare</label><button class="star ${state.favorites.has(row.posting_key) ? "saved" : ""}" data-key="${escapeHtml(row.posting_key)}" aria-label="Save ${escapeHtml(row.title)}">★</button><a class="apply-button" href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">Apply</a></div>
   </article>`;
 }
 
@@ -147,7 +233,7 @@ function renderBrowse({history, status}) {
   [...new Set(openRows.map((row) => row.employer).filter(Boolean))].sort().forEach((value) => employerSelect.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`));
   [...new Set(openRows.map((row) => row.location).filter(Boolean))].sort().forEach((value) => locationSelect.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`));
   const params = new URLSearchParams(window.location.search);
-  const state = {roleOnly: storage.get("roleOnly", true), favorites: new Set(storage.get("jobFavorites", [])), applications: storage.get("jobApplications", {})};
+  const state = {roleOnly: storage.get("roleOnly", true), favorites: new Set(storage.get("jobFavorites", [])), compare: new Set(storage.get("compareJobs", [])), applications: storage.get("jobApplications", {}), profile: profileData()};
   if (params.get("employer")) employerSelect.value = params.get("employer");
   $("#role-toggle").checked = state.roleOnly;
   const latestDate = status.latest_run_date || openRows.reduce((latest, row) => dateOnly(row.last_seen) > latest ? dateOnly(row.last_seen) : latest, "");
@@ -157,13 +243,14 @@ function renderBrowse({history, status}) {
     const model = $("#work-model-filter").value;
     const sponsorship = $("#sponsorship-filter").value;
     const degree = $("#degree-filter").value;
+    const program = $("#program-filter").value;
     const salary = $("#salary-filter").value;
     const tracking = $("#tracking-filter").value;
     let rows = openRows.filter((row) => {
       const app = applicationFor(state.applications, row.posting_key);
       const rowModel = workplace(row).toLowerCase();
-      const salaryKnown = row.salary_min || row.salary_max;
-      return (!state.roleOnly || row.in_role) && (!employerSelect.value || row.employer === employerSelect.value) && (!locationSelect.value || row.location === locationSelect.value) && (!titleQuery || String(row.title).toLowerCase().includes(titleQuery)) && (!stage || (stage === "internship" ? row.is_internship : stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!model || rowModel === model) && (!sponsorship || row.sponsorship === sponsorship) && (!degree || row.degree_requirement === degree) && (!salary || (salary === "listed" ? salaryKnown : Number(row.salary_min || row.salary_max || 0) >= 100000)) && (!tracking || (tracking === "saved" ? state.favorites.has(row.posting_key) : tracking === "not-started" ? app.status === "Not started" : app.status === tracking));
+      const salaryKnown = annualSalary(row).low || annualSalary(row).high;
+      return (!state.roleOnly || row.in_role) && (!employerSelect.value || row.employer === employerSelect.value) && (!locationSelect.value || row.location === locationSelect.value) && (!titleQuery || String(row.title).toLowerCase().includes(titleQuery)) && (!stage || (stage === "internship" ? row.is_internship : stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!program || programType(row) === program) && (!model || rowModel === model) && (!sponsorship || row.sponsorship === sponsorship) && (!degree || row.degree_requirement === degree) && (!salary || (salary === "listed" ? salaryKnown : annualSalary(row).high >= 100000)) && (!tracking || (tracking === "saved" ? state.favorites.has(row.posting_key) : tracking === "not-started" ? app.status === "Not started" : app.status === tracking));
     });
     const age = Number($("#days-filter").value || 0);
     if (age) rows = rows.filter((row) => daysBetween(row.first_seen, latestDate) >= age);
@@ -172,12 +259,23 @@ function renderBrowse({history, status}) {
     rows.sort((a, b) => sort === "oldest" ? dateOnly(a.first_seen).localeCompare(dateOnly(b.first_seen)) : sort === "employer" ? a.employer.localeCompare(b.employer) : sort === "match" ? fitScore(b) - fitScore(a) : sort === "salary" ? Number(b.salary_max || b.salary_min || 0) - Number(a.salary_max || a.salary_min || 0) : dateOnly(b.first_seen).localeCompare(dateOnly(a.first_seen)));
     $("#browse-count").textContent = rows.length;
     $("#browse-summary").textContent = `${rows.length} ${rows.length === 1 ? "posting" : "postings"} · ${state.roleOnly ? "finance / early-career match" : "all US postings"} · duplicates hidden`;
+    if ($("#compare-count")) $("#compare-count").textContent = state.compare.size;
+    if ($("#compare-link")) $("#compare-link").href = `./compare.html?jobs=${encodeURIComponent([...state.compare].join(","))}`;
     $("#posting-list").innerHTML = rows.length ? rows.map((row) => postingCard(row, state, latestDate)).join("") : `<div class="panel"><p class="empty">No postings match these filters.</p></div>`;
     $$(".star").forEach((button) => button.addEventListener("click", () => { const key = button.dataset.key; state.favorites.has(key) ? state.favorites.delete(key) : state.favorites.add(key); storage.set("jobFavorites", [...state.favorites]); render(); }));
+    $$(".compare-toggle").forEach((checkbox) => checkbox.addEventListener("change", () => { const key = checkbox.dataset.key; if (checkbox.checked && state.compare.size >= 3) { checkbox.checked = false; return; } checkbox.checked ? state.compare.add(key) : state.compare.delete(key); storage.set("compareJobs", [...state.compare]); render(); }));
     $$(".app-status").forEach((select) => select.addEventListener("change", () => { const key = select.dataset.key; state.applications[key] = {...applicationFor(state.applications, key), status:select.value, updatedAt:new Date().toISOString()}; storage.set("jobApplications", state.applications); }));
+    $$(".app-deadline").forEach((input) => input.addEventListener("change", () => { const key = input.dataset.key; state.applications[key] = {...applicationFor(state.applications, key), deadline:input.value, updatedAt:new Date().toISOString()}; storage.set("jobApplications", state.applications); }));
     $$(".app-note").forEach((note) => note.addEventListener("blur", () => { const key = note.dataset.key; state.applications[key] = {...applicationFor(state.applications, key), note:note.value, updatedAt:new Date().toISOString()}; storage.set("jobApplications", state.applications); }));
   };
-  [$("#role-toggle"), employerSelect, locationSelect, $("#days-filter"), $("#title-search"), $("#sort-filter"), $("#stage-filter"), $("#work-model-filter"), $("#sponsorship-filter"), $("#degree-filter"), $("#salary-filter"), $("#tracking-filter")].forEach((element) => element.addEventListener(element.type === "checkbox" ? "change" : "input", () => { if (element === $("#role-toggle")) { state.roleOnly = element.checked; storage.set("roleOnly", state.roleOnly); } render(); }));
+  [$("#role-toggle"), employerSelect, locationSelect, $("#days-filter"), $("#title-search"), $("#sort-filter"), $("#stage-filter"), $("#program-filter"), $("#work-model-filter"), $("#sponsorship-filter"), $("#degree-filter"), $("#salary-filter"), $("#tracking-filter")].filter(Boolean).forEach((element) => element.addEventListener(element.type === "checkbox" ? "change" : "input", () => { if (element === $("#role-toggle")) { state.roleOnly = element.checked; storage.set("roleOnly", state.roleOnly); } render(); }));
+  $("#save-search")?.addEventListener("click", () => {
+    const searches = storage.get("savedSearches", []);
+    const name = $("#search-name")?.value.trim() || `Search ${searches.length + 1}`;
+    searches.unshift({id:`search-${Date.now()}`, name, ...currentSearch(), createdAt:new Date().toISOString()});
+    storage.set("savedSearches", searches.slice(0, 12));
+    if ($("#search-feedback")) $("#search-feedback").textContent = "Saved to your Workspace.";
+  });
   render();
 }
 
@@ -237,6 +335,84 @@ function renderCompanies({history, status}) {
   $("#company-summary").textContent = `${employers.length} tracked finance employers · ${openRows.length} open early-career matches · refreshed ${fmtDate(status.latest_run_date)}`;
 }
 
+function saveApplication(key, patch) {
+  const applications = storage.get("jobApplications", {});
+  applications[key] = {...applicationFor(applications, key), ...patch, updatedAt:new Date().toISOString()};
+  storage.set("jobApplications", applications);
+  return applications[key];
+}
+
+function jobUrl(key) {
+  return `./job.html?job=${encodeURIComponent(key)}`;
+}
+
+function renderJobDetail({history, status}) {
+  const key = new URLSearchParams(window.location.search).get("job");
+  const row = history.find((item) => item.posting_key === key) || history.find((item) => item.posting_key === decodeURIComponent(key || ""));
+  const container = $("#job-detail");
+  if (!row) { container.innerHTML = `<div class="panel"><h2>Job not found</h2><p class="empty">This role may have been removed from the current public index.</p><a class="apply-button" href="./browse.html">Back to Browse</a></div>`; return; }
+  const applications = storage.get("jobApplications", {});
+  const favorites = new Set(storage.get("jobFavorites", []));
+  const app = applicationFor(applications, row.posting_key);
+  const profile = profileMatch(row);
+  const cost = locationProfile(row.location);
+  const salary = salaryLabel(row);
+  const annualized = normalizedSalaryLabel(row);
+  const verified = dateOnly(row.last_seen) === dateOnly(status.latest_run_date);
+  container.innerHTML = `<div class="detail-kicker"><a href="./browse.html">← Browse roles</a><span class="${verified ? "verified-label" : "stale-label"}">${verified ? "Verified in latest source run" : `Last seen ${fmtDate(row.last_seen)}`}</span></div><div class="job-detail-heading"><div><p class="eyebrow">${escapeHtml(row.employer)} · ${escapeHtml(row.source || "employer feed")}</p><h1>${escapeHtml(row.title)}</h1><p class="job-subtitle">${escapeHtml(row.location || "US location not listed")} · ${escapeHtml(workplace(row))} · ${escapeHtml(programType(row))}</p></div><div class="detail-score"><strong>${fitScore(row)}%</strong><span>role fit</span>${profile ? `<small>${profile.score}% profile fit</small>` : ""}</div></div><div class="job-detail-grid"><div><section class="detail-section"><p class="eyebrow">Role snapshot</p><div class="detail-facts"><span><strong>${escapeHtml(salary)}</strong><small>${salary === "Salary not listed" ? "Employer did not publish a range" : escapeHtml(annualized)}</small></span><span><strong>${escapeHtml(cost.band)}</strong><small>${escapeHtml(cost.label)} cost band</small></span><span><strong>${verified ? "Verified today" : freshness(row, status.latest_run_date).label}</strong><small>source freshness</small></span></div></section><section class="detail-section"><p class="eyebrow">About the role</p>${row.description_excerpt ? `<p class="description-copy">${escapeHtml(row.description_excerpt)}</p>` : `<p class="description-copy">The public index has the role metadata but not a description for this source. Use the employer posting for the full responsibilities and qualifications.</p>`}</section><section class="detail-section"><p class="eyebrow">Candidate signals</p><div class="signal-grid"><span>${escapeHtml(programType(row))}</span><span>${row.sponsorship === "mentioned" ? "Sponsorship mentioned" : row.sponsorship === "no" ? "No sponsorship listed" : "Sponsorship not listed"}</span><span>${row.degree_requirement === "mentioned" ? "Degree mentioned" : "Degree not listed"}</span><span>${row.is_internship ? "Internship signal" : row.is_new_grad ? "New graduate signal" : "Entry-level signal"}</span></div></section></div><aside class="detail-aside"><section class="panel tracker-panel"><p class="eyebrow">Your application</p><label>Status<select id="detail-status">${APPLICATION_STATUSES.map((value) => `<option ${value === app.status ? "selected" : ""}>${value}</option>`).join("")}</select></label><label>Deadline<input id="detail-deadline" type="date" value="${escapeHtml(app.deadline || "")}"></label><label>Private note<textarea id="detail-note" rows="4" placeholder="Interview prep, contact, follow-up…">${escapeHtml(app.note || "")}</textarea></label><button class="button button-dark" id="save-detail">Save application</button><span class="form-feedback" id="detail-feedback"></span><button class="secondary-button" id="favorite-detail">${favorites.has(row.posting_key) ? "★ Saved" : "☆ Save job"}</button><a class="apply-button detail-apply" href="${escapeHtml(row.apply_url)}" target="_blank" rel="noreferrer">Apply on employer site</a></section></aside></div>`;
+  $("#save-detail").addEventListener("click", () => { saveApplication(row.posting_key, {status:$("#detail-status").value, deadline:$("#detail-deadline").value, note:$("#detail-note").value}); $("#detail-feedback").textContent = "Saved locally."; });
+  $("#favorite-detail").addEventListener("click", () => { const next = new Set(storage.get("jobFavorites", [])); next.has(row.posting_key) ? next.delete(row.posting_key) : next.add(row.posting_key); storage.set("jobFavorites", [...next]); $("#favorite-detail").textContent = next.has(row.posting_key) ? "★ Saved" : "☆ Save job"; });
+}
+
+function renderCompare({history}) {
+  const queryKeys = new URLSearchParams(window.location.search).get("jobs");
+  const keys = queryKeys ? queryKeys.split(",").map((key) => decodeURIComponent(key)).filter(Boolean) : storage.get("compareJobs", []);
+  const rows = keys.map((key) => history.find((row) => row.posting_key === key)).filter(Boolean).slice(0, 3);
+  const container = $("#compare-table");
+  if (!rows.length) { container.innerHTML = `<div class="panel"><h2>No jobs selected</h2><p class="empty">Choose up to three roles on Browse, then compare them here.</p><a class="apply-button" href="./browse.html">Choose jobs</a></div>`; return; }
+  const fields = [["Employer", (row) => row.employer], ["Location", (row) => row.location || "Not listed"], ["Work model", workplace], ["Program", programType], ["Salary", normalizedSalaryLabel], ["Role fit", (row) => `${fitScore(row)}%`], ["Profile fit", (row) => profileMatch(row)?.score ? `${profileMatch(row).score}%` : "Add profile"], ["Cost band", (row) => locationProfile(row.location).band], ["Freshness", (row) => dateOnly(row.last_seen) === dateOnly(new Date().toISOString()) ? "Verified today" : fmtDate(row.last_seen)], ["First seen", (row) => fmtDate(row.first_seen)]];
+  container.innerHTML = `<div class="compare-scroll"><table class="compare-table"><thead><tr><th>Signal</th>${rows.map((row) => `<th><a href="${jobUrl(row.posting_key)}">${escapeHtml(row.title)}</a><button class="remove-compare" data-key="${escapeHtml(row.posting_key)}">Remove</button></th>`).join("")}</tr></thead><tbody>${fields.map(([label, value]) => `<tr><th>${escapeHtml(label)}</th>${rows.map((row) => `<td>${escapeHtml(value(row))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  $$(".remove-compare").forEach((button) => button.addEventListener("click", () => { const next = storage.get("compareJobs", []).filter((key) => key !== button.dataset.key); storage.set("compareJobs", next); button.closest("th").remove(); renderCompare({history}); }));
+}
+
+function applicationStats(history) {
+  const applications = storage.get("jobApplications", {});
+  const values = Object.values(applications);
+  const count = (status) => values.filter((item) => item.status === status).length;
+  const applied = count("Applied") + count("Interview") + count("Offer") + count("Closed");
+  return {saved:storage.get("jobFavorites", []).length, tracked:values.length, applied, interview:count("Interview"), offers:count("Offer"), responseRate:applied ? Math.round((count("Interview") + count("Offer")) / applied * 100) : 0};
+}
+
+function renderWorkspace({history, status}) {
+  let profile = profileData();
+  const applications = storage.get("jobApplications", {});
+  const stats = applicationStats(history);
+  const today = new Date().toISOString().slice(0, 10);
+  const deadlines = Object.entries(applications).filter(([, item]) => item.deadline && item.deadline >= today).sort((a, b) => a[1].deadline.localeCompare(b[1].deadline)).slice(0, 8).map(([key, item]) => ({row:history.find((row) => row.posting_key === key), item})).filter((item) => item.row);
+  const savedSearches = storage.get("savedSearches", []);
+  const latestRows = history.filter((row) => row.first_seen === status.latest_run_date && row.is_us && row.in_role);
+  $("#workspace-summary").textContent = `${stats.tracked} tracked applications · ${savedSearches.length} saved searches · data refreshed ${fmtDate(status.latest_run_date)}`;
+  $("#workspace-stats").innerHTML = [[stats.saved,"Saved jobs"],[stats.tracked,"Tracked roles"],[stats.applied,"Applications"],[stats.interview,"Interviews"],[stats.offers,"Offers"],[`${stats.responseRate}%`,"Interview / offer rate"]].map(([value,label]) => `<article class="metric-card"><span>${label}</span><strong>${value}</strong><small>stored in this browser</small></article>`).join("");
+  $("#deadline-list").innerHTML = deadlines.length ? deadlines.map(({row,item}) => `<div class="deadline-row"><div><a href="${jobUrl(row.posting_key)}">${escapeHtml(row.title)}</a><span>${escapeHtml(row.employer)} · ${escapeHtml(item.status)}</span></div><time datetime="${escapeHtml(item.deadline)}">${fmtDate(item.deadline)}</time></div>`).join("") : `<p class="empty">No upcoming deadlines saved yet.</p>`;
+  $("#saved-search-list").innerHTML = savedSearches.length ? savedSearches.map((search) => { const matches = latestRows.filter((row) => searchMatches(row, search)).length; return `<div class="saved-search-row"><div><strong>${escapeHtml(search.name)}</strong><span>${escapeHtml(search.query || "All finance roles")} · ${matches} new match${matches === 1 ? "" : "es"} today</span></div><button class="secondary-button delete-search" data-id="${escapeHtml(search.id)}">Remove</button></div>`; }).join("") : `<p class="empty">Save a search from Browse to get a quick new-role check here.</p>`;
+  const locations = Object.entries(groupBy(history.filter((row) => !row.removed_date && row.is_us && row.in_role), (row) => locationProfile(row.location).label)).map(([label, rows]) => { const profile = locationProfile(rows[0].location); const salaries = rows.map((row) => annualSalary(row).low).filter(Boolean); return {label, band:profile.band, count:rows.length, salary:salaries.length ? Math.round(salaries.reduce((a, b) => a + b, 0) / salaries.length) : 0}; }).sort((a, b) => b.count - a.count).slice(0, 8);
+  const byState = groupBy(history.filter((row) => !row.removed_date && row.is_us && row.in_role), (row) => locationProfile(row.location).state);
+  $("#location-map").innerHTML = `<div class="map-legend"><span><i class="map-dot small"></i> fewer roles</span><span><i class="map-dot large"></i> more roles</span></div><svg viewBox="0 0 110 175" role="img" aria-label="Relative concentration of tracked roles by state">${Object.entries(MAP_POINTS).map(([state, [x, y]]) => { const count = (byState[state] || []).length; const radius = Math.max(2, Math.min(9, 2 + count / 40)); const band = COST_BANDS[state]?.band || "Not available"; return `<circle cx="${x}" cy="${y}" r="${radius}" class="map-point" data-state="${state}"><title>${state}: ${count} roles · ${band} cost band</title></circle>`; }).join("")}<path class="map-outline" d="M9 32L26 17L42 22L58 15L78 27L95 40L89 56L99 71L89 86L95 102L86 118L79 139L64 153L48 162L33 151L20 140L11 116L14 91L7 76Z"/></svg>`;
+  $("#location-insights").innerHTML = locations.length ? locations.map((item) => `<div class="location-row"><span><strong>${escapeHtml(item.label)}</strong><small>${escapeHtml(item.band)} cost band</small></span><b>${item.count}</b><span>${item.salary ? `$${item.salary.toLocaleString()} avg listed` : "Salary data limited"}</span></div>`).join("") : `<p class="empty">Location insights will appear as US roles accumulate.</p>`;
+  $("#profile-name").value = profile.name || "";
+  $("#profile-skills").value = (profile.skills || []).join(", ");
+  $("#resume-text").value = profile.resumeText || "";
+  $("#notification-toggle").checked = profile.browserAlerts !== false;
+  $("#digest-toggle").checked = profile.weeklyDigest !== false;
+  $("#profile-match-summary").textContent = profile.skills?.length || profile.resumeText ? `${[...(profile.skills || []), ...extractSkills(profile.resumeText || "")].filter((value, index, values) => values.indexOf(value) === index).length} skills ready for profile matching.` : "Add skills or a resume text file to personalize match scores.";
+  $$(".delete-search").forEach((button) => button.addEventListener("click", () => { storage.set("savedSearches", storage.get("savedSearches", []).filter((search) => search.id !== button.dataset.id)); renderWorkspace({history, status}); }));
+  $("#save-profile").addEventListener("click", () => { const skills = $("#profile-skills").value.split(",").map((value) => value.trim()).filter(Boolean); profile = {...profile, name:$("#profile-name").value.trim(), skills, resumeText:$("#resume-text").value, browserAlerts:$("#notification-toggle").checked, weeklyDigest:$("#digest-toggle").checked}; storage.set("jobProfile", profile); $("#profile-feedback").textContent = "Profile saved locally."; });
+  $("#enable-notifications").addEventListener("click", async () => { if (!("Notification" in window)) { $("#profile-feedback").textContent = "This browser does not support notifications."; return; } const permission = await Notification.requestPermission(); profile = {...profile, browserAlerts:permission === "granted"}; storage.set("jobProfile", profile); $("#profile-feedback").textContent = permission === "granted" ? "Browser alerts enabled." : "Browser alerts remain off."; });
+  $("#resume-file").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { $("#resume-text").value = String(reader.result || ""); $("#profile-feedback").textContent = `${file.name} loaded. Save your profile to use it for matching.`; }; reader.readAsText(file); });
+  $("#export-profile").addEventListener("click", () => { const payload = {profile:storage.get("jobProfile", {}), favorites:storage.get("jobFavorites", []), applications:storage.get("jobApplications", {}), searches:storage.get("savedSearches", [])}; const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"}); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "job-watcher-profile.json"; link.click(); URL.revokeObjectURL(link.href); });
+  $("#import-profile").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const payload = JSON.parse(String(reader.result)); if (payload.profile) storage.set("jobProfile", payload.profile); if (payload.favorites) storage.set("jobFavorites", payload.favorites); if (payload.applications) storage.set("jobApplications", payload.applications); if (payload.searches) storage.set("savedSearches", payload.searches); renderWorkspace({history, status}); } catch (_error) { $("#profile-feedback").textContent = "That file could not be imported."; } }; reader.readAsText(file); });
+}
+
 async function init() {
   showNetworkState();
   window.addEventListener("online", showNetworkState);
@@ -247,6 +423,9 @@ async function init() {
   if (page === "browse") renderBrowse(data);
   if (page === "market") renderMarket(data);
   if (page === "companies") renderCompanies(data);
+  if (page === "job") renderJobDetail(data);
+  if (page === "compare") renderCompare(data);
+  if (page === "workspace") renderWorkspace(data);
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 }
 
