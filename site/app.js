@@ -42,6 +42,23 @@ const COMPANY_PROFILES = {
   "Capital One": {focus:"Consumer finance, credit, risk, product, and financial analysis.", ats:"Workday"},
   "Northern Trust": {focus:"Asset servicing, wealth management, banking, and investment operations.", ats:"Workday"}
 };
+const COMPANY_LOGOS = {
+  "Edward Jones":"./assets/logos/edward-jones.png",
+  "Stifel":"./assets/logos/stifel.png",
+  "JPMorgan Chase":"./assets/logos/jpmorgan-chase.png",
+  "Bank of America":"./assets/logos/bank-of-america.png",
+  "Citi":"./assets/logos/citi.png",
+  "Wells Fargo":"./assets/logos/wells-fargo.png",
+  "Goldman Sachs":"./assets/logos/goldman-sachs.png",
+  "Morgan Stanley":"./assets/logos/morgan-stanley.png",
+  "PNC":"./assets/logos/pnc.png",
+  "U.S. Bank":"./assets/logos/us-bank.png",
+  "State Street":"./assets/logos/state-street.png",
+  "BNY":"./assets/logos/bny.png",
+  "American Express":"./assets/logos/american-express.png",
+  "Capital One":"./assets/logos/capital-one.png",
+  "Northern Trust":"./assets/logos/northern-trust.png"
+};
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -216,6 +233,15 @@ function dedupeRows(rows) {
   return [...unique.values()];
 }
 
+function companyLogo(employer, detail = false) {
+  const initials = employer.slice(0, 2).toUpperCase();
+  const source = COMPANY_LOGOS[employer];
+  const detailClass = detail ? " detail-logo" : "";
+  const fallbackStyle = source ? ' style="display:none"' : "";
+  const image = source ? `<img class="company-logo" src="${source}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">` : "";
+  return `<span class="company-logo-shell${detailClass}">${image}<span class="company-monogram company-logo-fallback"${fallbackStyle}>${escapeHtml(initials)}</span></span>`;
+}
+
 function postingCard(row, state, latestDate) {
   const app = applicationFor(state.applications, row.posting_key);
   const fresh = freshness(row, latestDate);
@@ -342,8 +368,8 @@ function renderCompanies({history, status}) {
   const rows = byEmployer[selected] || [];
   const profile = COMPANY_PROFILES[selected] || {focus:"Finance roles from the current watch list.", ats:"Employer feed"};
   const latest = rows.reduce((value, row) => dateOnly(row.last_seen) > value ? dateOnly(row.last_seen) : value, "");
-  $("#company-detail").innerHTML = `<div class="company-detail-heading"><div class="company-monogram">${escapeHtml(selected.slice(0, 2).toUpperCase())}</div><div><p class="eyebrow">Company profile</p><h2>${escapeHtml(selected)}</h2><p>${escapeHtml(profile.focus)}</p></div></div><div class="company-metrics"><span><strong>${rows.length}</strong> open matches</span><span><strong>${rows.filter((row) => row.is_new_grad || row.is_internship).length}</strong> new-grad / internship signals</span><span><strong>${latest ? fmtDate(latest) : "—"}</strong> last seen</span></div><p class="company-source">Feed: ${escapeHtml(profile.ats)} · <a href="./browse.html?employer=${encodeURIComponent(selected)}">Browse this company’s roles →</a></p>`;
-  $("#company-list").innerHTML = employers.map((employer) => { const employerRows = byEmployer[employer] || []; const profileData = COMPANY_PROFILES[employer]; return `<a class="company-card ${employer === selected ? "selected" : ""}" href="./companies.html?company=${encodeURIComponent(employer)}"><div class="company-heading"><span class="company-monogram">${escapeHtml(employer.slice(0, 2).toUpperCase())}</span><span><strong>${escapeHtml(employer)}</strong><small>${escapeHtml(profileData.ats)}</small></span></div><p>${escapeHtml(profileData.focus)}</p><div class="company-roles"><span>${employerRows.length} open matches</span><span>${employerRows.filter((row) => row.is_new_grad || row.is_internship).length} early-career</span></div></a>`; }).join("");
+  $("#company-detail").innerHTML = `<div class="company-detail-heading">${companyLogo(selected, true)}<div><p class="eyebrow">Company profile</p><h2>${escapeHtml(selected)}</h2><p>${escapeHtml(profile.focus)}</p></div></div><div class="company-metrics"><span><strong>${rows.length}</strong> open matches</span><span><strong>${rows.filter((row) => row.is_new_grad || row.is_internship).length}</strong> new-grad / internship signals</span><span><strong>${latest ? fmtDate(latest) : "—"}</strong> last seen</span></div><p class="company-source">Feed: ${escapeHtml(profile.ats)} · <a href="./browse.html?employer=${encodeURIComponent(selected)}">Browse this company’s roles →</a></p>`;
+  $("#company-list").innerHTML = employers.map((employer) => { const employerRows = byEmployer[employer] || []; const profileData = COMPANY_PROFILES[employer]; return `<a class="company-card ${employer === selected ? "selected" : ""}" href="./companies.html?company=${encodeURIComponent(employer)}"><div class="company-heading">${companyLogo(employer)}<span><strong>${escapeHtml(employer)}</strong><small>${escapeHtml(profileData.ats)}</small></span></div><p>${escapeHtml(profileData.focus)}</p><div class="company-roles"><span>${employerRows.length} open matches</span><span>${employerRows.filter((row) => row.is_new_grad || row.is_internship).length} early-career</span></div></a>`; }).join("");
   $("#company-summary").textContent = `${employers.length} tracked finance employers · ${openRows.length} open early-career matches · refreshed ${fmtDate(status.latest_run_date)}`;
 }
 
