@@ -7,6 +7,12 @@ const DEMO_HISTORY = [
 const DEMO_STATUS = {run_utc:"2026-11-20T13:00:00Z", latest_run_date:"2026-11-20", earliest_raw_date:"2026-11-01", successful_run_days:20, open_postings:4, new_today:1, removed_today:0, first_run_postings:2, sources:[]};
 const APPLICATION_STATUSES = ["Not started", "Saved", "Applied", "Interview", "Offer", "Closed"];
 const PROGRAM_TYPES = ["Internship / campus", "New graduate program", "Rotational / leadership", "Entry-level"];
+const SALARY_BANDS = [
+  ["50000-55000", "$50k–$55k"], ["55000-60000", "$55k–$60k"], ["60000-65000", "$60k–$65k"],
+  ["65000-70000", "$65k–$70k"], ["70000-75000", "$70k–$75k"], ["75000-80000", "$75k–$80k"],
+  ["80000-85000", "$80k–$85k"], ["85000-90000", "$85k–$90k"], ["90000-95000", "$90k–$95k"],
+  ["95000-100000", "$95k–$100k"], ["100000+", "$100k+"]
+];
 const COST_BANDS = {
   "NY": {label:"New York area", band:"High", index:145}, "CA": {label:"California", band:"High", index:139},
   "MA": {label:"Boston area", band:"High", index:132}, "DC": {label:"Washington, DC", band:"High", index:128},
@@ -274,6 +280,8 @@ function renderBrowse({history, status}) {
   const params = new URLSearchParams(window.location.search);
   const state = {roleOnly: storage.get("roleOnly", true), favorites: new Set(storage.get("jobFavorites", [])), compare: new Set(storage.get("compareJobs", [])), applications: storage.get("jobApplications", {}), profile: profileData()};
   if (params.get("employer")) employerSelect.value = params.get("employer");
+  if (params.get("location")) locationSelect.value = params.get("location");
+  if (params.get("salary")) $("#salary-filter").value = params.get("salary");
   $("#role-toggle").checked = state.roleOnly;
   const latestDate = status.latest_run_date || openRows.reduce((latest, row) => dateOnly(row.last_seen) > latest ? dateOnly(row.last_seen) : latest, "");
   const render = () => {
@@ -323,9 +331,21 @@ function barChart(element, pairs, color = "blue") {
   element.innerHTML = pairs.map(([label, value]) => `<div class="bar-wrap" title="${escapeHtml(label)}: ${value}"><div class="bar ${color}" style="height:${Math.max(4, value / max * 100)}%"></div><span class="bar-label">${escapeHtml(label)}</span></div>`).join("");
 }
 
-function horizontalChart(element, pairs) {
+function horizontalChart(element, pairs, browseParam = "") {
   const max = Math.max(...pairs.map((pair) => pair[1]), 1);
-  element.innerHTML = pairs.length ? pairs.map(([label, value]) => `<div class="hbar-row"><span>${escapeHtml(label || "Not listed")}</span><span class="hbar-track"><span class="hbar-fill" style="width:${value / max * 100}%"></span></span><span class="hbar-value">${value}</span></div>`).join("") : `<span class="empty">Not enough history yet.</span>`;
+  element.innerHTML = pairs.length ? pairs.map(([label, value]) => {
+    const displayLabel = label || "Not listed";
+    const isLink = browseParam && displayLabel !== "Not listed";
+    const tag = isLink ? "a" : "div";
+    const attributes = isLink ? ` href="./browse.html?${browseParam}=${encodeURIComponent(displayLabel)}" title="Browse ${escapeHtml(displayLabel)} roles"` : "";
+    return `<${tag} class="hbar-row${isLink ? " hbar-link" : ""}"${attributes}><span>${escapeHtml(displayLabel)}</span><span class="hbar-track"><span class="hbar-fill" style="width:${value / max * 100}%"></span></span><span class="hbar-value">${value}</span></${tag}>`;
+  }).join("") : `<span class="empty">Not enough history yet.</span>`;
+}
+
+function renderSalaryBands(rows) {
+  const counts = SALARY_BANDS.map(([value, label]) => [value, label, rows.filter((row) => salaryMatches(row, value)).length]);
+  const max = Math.max(...counts.map(([, , count]) => count), 1);
+  $("#salary-band-chart").innerHTML = counts.map(([value, label, count]) => `<a class="salary-band" href="./browse.html?salary=${encodeURIComponent(value)}" title="Browse ${escapeHtml(label)} roles"><span class="salary-band-label">${escapeHtml(label)}</span><span class="salary-band-track"><span class="salary-band-fill" style="width:${Math.max(5, count / max * 100)}%"></span></span><strong>${count}</strong><small>open roles</small></a>`).join("");
 }
 
 function renderMarket({history, status}) {
@@ -342,8 +362,10 @@ function renderMarket({history, status}) {
   $("#new-explain").textContent = "The chart excludes the first-run inventory, so this is the flow observed after watching began.";
   $("#removed-finding").textContent = `${removedCount} postings have left the watch list.`;
   $("#removed-explain").textContent = "A removal is only recorded when that employer returned a successful, fresh board response.";
-  const openByEmployer = Object.entries(groupBy(usHistory.filter((row) => !row.removed_date), (row) => row.employer)).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]);
-  horizontalChart($("#employer-chart"), openByEmployer);
+  const openRows = usHistory.filter((row) => !row.removed_date);
+  renderSalaryBands(openRows);
+  const openByEmployer = Object.entries(groupBy(openRows, (row) => row.employer)).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]);
+  horizontalChart($("#employer-chart"), openByEmployer, "employer");
   const removedEligible = usHistory.filter((row) => row.removed_date && !row.first_run && row.first_seen);
   const durations = removedEligible.map((row) => daysBetween(row.first_seen, row.removed_date)).sort((a, b) => a - b);
   const median = durations.length ? durations[Math.floor(durations.length / 2)] : 0;
@@ -357,7 +379,7 @@ function renderMarket({history, status}) {
   $("#share-explain").textContent = "The denominator is limited to non-first-run roles old enough to qualify for the comparison.";
   $("#share-stat").textContent = `${share}%`;
   const locations = Object.entries(groupBy(usHistory.filter((row) => !row.removed_date), (row) => row.location || "Not listed")).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]).slice(0, 5);
-  horizontalChart($("#location-chart"), locations);
+  horizontalChart($("#location-chart"), locations, "location");
 }
 
 function renderCompanies({history, status}) {

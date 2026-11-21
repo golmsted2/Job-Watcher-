@@ -105,6 +105,17 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .star.saved { color: var(--yellow); }
 .apply-button { padding: 11px 13px; color: white; background: var(--blue); font-size: 12px; font-weight: 800; text-decoration: none; white-space: nowrap; }
 .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.market-explorer { margin-bottom: 18px; }
+.market-explorer .panel-heading { margin-bottom: 17px; }
+.chart-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.salary-band-chart { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.salary-band { display: grid; align-content: end; gap: 8px; min-height: 112px; padding: 13px 12px; border: 1px solid var(--line); color: var(--ink); background: #fbfcfb; text-decoration: none; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.salary-band:hover, .salary-band:focus-visible { border-color: var(--teal); box-shadow: 0 9px 22px rgba(13,139,131,.12); transform: translateY(-2px); }
+.salary-band-label { color: var(--navy); font-size: 12px; font-weight: 850; }
+.salary-band-track { display: block; height: 8px; background: #e7efed; }
+.salary-band-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--blue)); }
+.salary-band strong { color: var(--teal); font: 700 25px/1 Georgia, serif; }
+.salary-band small { color: var(--muted); font-size: 10px; }
 .market-visual { position: relative; min-height: 280px; margin-bottom: 18px; overflow: hidden; background: var(--navy); }
 .market-visual img { display: block; width: 100%; height: 300px; object-fit: cover; object-position: center; opacity: .86; }
 .market-visual::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(14,27,42,.98) 0%, rgba(14,27,42,.78) 28%, rgba(14,27,42,.16) 66%, rgba(14,27,42,.06)); }
@@ -124,6 +135,8 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .bar.coral { background: var(--coral); }
 .bar-label { color: var(--muted); font-size: 9px; white-space: nowrap; }
 .hbar-row { display: grid; grid-template-columns: minmax(75px, 1fr) 2fr auto; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; }
+.hbar-link { padding: 4px 5px; margin: -4px -5px; border-radius: 4px; text-decoration: none; transition: background .15s, color .15s; }
+.hbar-link:hover, .hbar-link:focus-visible { color: var(--navy); background: #eef8f5; }
 .hbar-track { height: 9px; background: #edf0ef; }
 .hbar-fill { height: 100%; background: var(--teal); }
 .hbar-value { color: var(--navy); font-weight: 800; }
@@ -135,6 +148,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   .topbar { gap: 24px; }
   .metric-grid { grid-template-columns: repeat(2, 1fr); }
   .two-column, .market-grid { grid-template-columns: 1fr; }
+  .salary-band-chart { grid-template-columns: repeat(4, 1fr); }
   .filter-panel { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 620px) {
@@ -154,6 +168,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   .chart { margin-top: 24px; }
   .market-visual img { height: 315px; }
   .market-visual-copy { max-width: 86%; padding: 24px; }
+  .salary-band-chart { grid-template-columns: repeat(2, 1fr); }
   .posting-card { grid-template-columns: 1fr; }
   .posting-actions { justify-content: space-between; }
   .callout { align-items: start; flex-wrap: wrap; }

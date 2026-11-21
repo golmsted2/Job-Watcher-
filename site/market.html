@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0e1b2a">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css?v=hero-small">
+  <link rel="stylesheet" href="./styles.css?v=market-interactive">
   <title>Job Watcher · Market</title>
 </head>
 <body data-page="market">
@@ -20,17 +20,21 @@
       <img src="./assets/market-network.png" alt="A connected city network representing finance career opportunities across markets" width="1792" height="1024" loading="lazy">
       <div class="market-visual-copy"><p class="eyebrow">Opportunity map</p><h2>See where the market is clustering.</h2><p>This visual layer complements the live counts below; the charts remain calculated from the published job history.</p></div>
     </section>
+    <section class="market-explorer panel" aria-labelledby="salary-band-heading">
+      <div class="panel-heading"><div><p class="eyebrow">Interactive salary bands</p><h2 id="salary-band-heading">Where published pay is clustering.</h2><p class="chart-note">Click a band to browse matching roles. Published ranges count when they overlap the selected band.</p></div><span class="live-dot"></span></div>
+      <div id="salary-band-chart" class="salary-band-chart" aria-live="polite"></div>
+    </section>
     <section class="market-grid">
       <article class="insight-card wide"><div class="insight-copy"><p class="eyebrow">Hiring flow</p><h2 id="new-finding">New postings are arriving.</h2><p id="new-explain"></p></div><div id="new-chart" class="chart"></div></article>
       <article class="insight-card wide"><div class="insight-copy"><p class="eyebrow">Churn</p><h2 id="removed-finding">Removals show the market moving.</h2><p id="removed-explain"></p></div><div id="removed-chart" class="chart"></div></article>
-      <article class="insight-card"><p class="eyebrow">Current shape</p><h2>Open postings by employer</h2><div id="employer-chart" class="chart tall"></div></article>
+      <article class="insight-card"><p class="eyebrow">Current shape</p><h2>Open postings by employer</h2><p class="chart-note">Click a company to browse its roles.</p><div id="employer-chart" class="chart tall"></div></article>
       <article class="insight-card"><p class="eyebrow">Shelf life</p><h2 id="days-finding">Roles stay open —</h2><p id="days-explain"></p><div class="big-stat" id="days-stat">—</div></article>
       <article class="insight-card"><p class="eyebrow">Speed</p><h2 id="share-finding">Early removals are —</h2><p id="share-explain"></p><div class="big-stat coral" id="share-stat">—</div></article>
-      <article class="insight-card"><p class="eyebrow">Geography</p><h2>Top locations among open roles</h2><div id="location-chart" class="chart tall"></div></article>
+      <article class="insight-card"><p class="eyebrow">Geography</p><h2>Top locations among open roles</h2><p class="chart-note">Click a location to browse its roles.</p><div id="location-chart" class="chart tall"></div></article>
     </section>
   </main>
   <footer class="footer"><span>FDA Job Watcher</span><span>First-run inventory is excluded where a start date would be unknowable.</span></footer>
-  <script src="./app.js?v=company-logos"></script>
+  <script src="./app.js?v=market-interactive"></script>
 </body>
 </html>
 
