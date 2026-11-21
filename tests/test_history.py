@@ -1,7 +1,7 @@
 import gzip
 import json
 
-from jobwatcher.history import build_history, build_status, write_json
+from jobwatcher.history import assignment_status, build_history, build_status, write_history_csv, write_json
 
 
 def _write_snapshot(root, day, jobs, *, ok=True):
@@ -50,4 +50,18 @@ def test_failed_source_does_not_mark_jobs_removed(tmp_path):
     assert history[0]["removed_date"] == ""
     status = build_status(raw, history)
     assert status["successful_run_days"] == 2
+
+
+def test_assignment_exports_use_the_professor_contract(tmp_path):
+    raw = tmp_path / "raw"
+    job = {"id": "a", "title": "Financial Analyst", "location": {"name": "Austin, TX"}, "absolute_url": "https://example.test/a"}
+    _write_snapshot(raw, "2026-11-17", [job])
+    history = build_history(raw)
+    csv_path = tmp_path / "history.csv"
+    write_history_csv(csv_path, history)
+    header = csv_path.read_text(encoding="utf-8").splitlines()[0]
+    assert header == "posting_id,source,source_id,employer,title,location,department,posted_date,url,in_role,first_run,first_seen,last_seen,status,removed_date"
+    compact = assignment_status(build_status(raw, history))
+    assert set(compact) == {"run_time", "first_run_date", "days_with_success", "open", "new_today", "removed_today", "sources"}
+    assert compact["sources"] == [{"name": "stripe", "ok": True, "count": 1}]
 

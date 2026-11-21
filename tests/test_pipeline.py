@@ -17,7 +17,10 @@ def test_pipeline_continues_after_one_source_fails(tmp_path, monkeypatch):
         return [{"id": "1", "title": "Financial Analyst", "location": {"name": "New York, NY"}, "absolute_url": "https://example.test/1"}]
 
     monkeypatch.setattr(pipeline, "fetch_json", fake_fetch)
-    monkeypatch.setattr(pipeline, "_fetch_salary_page", lambda _url: (None, None, "", ""))
+    def fail_if_html_is_fetched(_url):
+        raise AssertionError("the scheduled assignment pipeline must not read job-page HTML")
+
+    monkeypatch.setattr(pipeline, "_fetch_salary_page", fail_if_html_is_fetched)
     raw = tmp_path / "raw"
     processed = tmp_path / "processed"
     site = tmp_path / "site-data"
@@ -29,6 +32,8 @@ def test_pipeline_continues_after_one_source_fails(tmp_path, monkeypatch):
     assert [source["ok"] for source in status["sources"]] == [True, False]
     assert json.loads((processed / "history.json").read_text())[0]["title"] == "Financial Analyst"
     assert (site / "status.json").exists()
+    assert (tmp_path / "history.csv").exists()
+    assert json.loads((tmp_path / "status.json").read_text())["open"] == 1
 
 
 def test_salary_enrichment_uses_cached_public_page_values(monkeypatch):

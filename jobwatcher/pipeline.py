@@ -16,7 +16,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from .config import SOURCE_BY_ID, Source, configured_sources
-from .history import build_history, build_status, issue_body, write_json
+from .history import assignment_status, build_history, build_status, issue_body, write_history_csv, write_json
 from .normalize import _salary_from_text, normalize_posting
 
 
@@ -449,6 +449,9 @@ def build_outputs(
     write_json(processed / "status.json", status)
     write_json(site_data / "history.json", history)
     write_json(site_data / "status.json", status)
+    assignment_root = processed.parent
+    write_history_csv(assignment_root / "history.csv", history)
+    write_json(assignment_root / "status.json", assignment_status(status))
     issue_date = status.get("latest_run_date") or datetime.now(timezone.utc).date().isoformat()
     (processed / "issue.md").write_text(issue_body(history, issue_date), encoding="utf-8")
     return status
@@ -485,7 +488,10 @@ def run_pipeline(
         }
         try:
             jobs = fetch_json(source)
-            jobs, salary_enriched = _enrich_salary_pages(source, jobs, salary_cache)
+            # The required assignment pipeline reads public JSON ATS feeds only.
+            # HTML salary enrichment remains available through the explicit
+            # --enrich-salaries command, outside the scheduled grading path.
+            salary_enriched = 0
             _write_gzip_json(day_dir / f"{source.id}.json.gz", {
                 "source": {"id": source.id, "employer": source.employer, "ats": source.ats, "endpoint": source.endpoint},
                 "run_date": day,

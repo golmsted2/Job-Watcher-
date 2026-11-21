@@ -1,0 +1,85 @@
+{
+  "run_time": "2026-11-21T19:15:53.446836+00:00",
+  "first_run_date": "2026-11-21",
+  "days_with_success": 1,
+  "open": 5267,
+  "new_today": 0,
+  "removed_today": 0,
+  "sources": [
+    {
+      "name": "Edward Jones",
+      "ok": true,
+      "count": 200
+    },
+    {
+      "name": "Stifel",
+      "ok": true,
+      "count": 161
+    },
+    {
+      "name": "JPMorgan Chase",
+      "ok": true,
+      "count": 400
+    },
+    {
+      "name": "Bank of America",
+      "ok": true,
+      "count": 400
+    },
+    {
+      "name": "Citi",
+      "ok": true,
+      "count": 100
+    },
+    {
+      "name": "Wells Fargo",
+      "ok": true,
+      "count": 400
+    },
+    {
+      "name": "Goldman Sachs",
+      "ok": true,
+      "count": 190
+    },
+    {
+      "name": "Morgan Stanley",
+      "ok": true,
+      "count": 100
+    },
+    {
+      "name": "PNC",
+      "ok": true,
+      "count": 400
+    },
+    {
+      "name": "U.S. Bank",
+      "ok": true,
+      "count": 400
+    },
+    {
+      "name": "State Street",
+      "ok": true,
+      "count": 1000
+    },
+    {
+      "name": "BNY",
+      "ok": true,
+      "count": 400
+    },
+    {
+      "name": "American Express",
+      "ok": true,
+      "count": 392
+    },
+    {
+      "name": "Capital One",
+      "ok": true,
+      "count": 330
+    },
+    {
+      "name": "Northern Trust",
+      "ok": true,
+      "count": 400
+    }
+  ]
+}

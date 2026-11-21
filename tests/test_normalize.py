@@ -1,3 +1,5 @@
+import pytest
+
 from jobwatcher.config import Source, is_in_role, is_us_location
 from jobwatcher.normalize import normalize_posting
 
@@ -163,5 +165,39 @@ def test_normalize_extracts_salary_range_from_published_description():
     assert row["salary_currency"] == "USD"
     assert row["salary_period"] == "year"
     assert row["salary_text"] == "$55,000–$65,000 annual"
+
+
+@pytest.mark.parametrize(
+    "source, raw, expected_location",
+    [
+        (
+            Source("mcloud-test", "MCloud Bank", "MCloud", "https://example.test/mcloud"),
+            {"job_id": "m1", "title": "Financial Analyst", "primary_city": "St. Louis", "primary_state": "MO", "primary_country": "United States", "function": "Finance", "url": "https://example.test/m1"},
+            "St. Louis, MO, United States",
+        ),
+        (
+            Source("jibe-test", "Jibe Bank", "Jibe", "https://example.test/jibe"),
+            {"job_id": "j1", "title": "Credit Analyst", "location": "Chicago, IL", "department": "Credit", "apply_url": "https://example.test/j1"},
+            "Chicago, IL",
+        ),
+        (
+            Source("eightfold-test", "Eightfold Bank", "Eightfold", "https://example.test/eightfold"),
+            {"job_id": "e1", "title": "Investment Analyst", "locations": "New York, NY", "department": "Investments", "positionUrl": "https://example.test/e1"},
+            "New York, NY",
+        ),
+        (
+            Source("phenom-test", "Phenom Bank", "Phenom", "https://example.test/phenom"),
+            {"req_id": "p1", "title": "Relationship Banker", "city": "Pittsburgh", "state": "PA", "country": "United States", "category": "Banking", "applyUrl": "https://example.test/p1"},
+            "Pittsburgh, PA, United States",
+        ),
+    ],
+)
+def test_active_watchlist_adapters_map_to_common_columns(source, raw, expected_location):
+    row = normalize_posting(raw, source)
+
+    assert row["posting_key"].startswith(f"{source.id}:")
+    assert row["location"] == expected_location
+    assert row["apply_url"].startswith("https://example.test/")
+    assert row["in_role"] is True
 
 

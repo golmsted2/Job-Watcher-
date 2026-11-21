@@ -326,9 +326,20 @@ function renderBrowse({history, status}) {
 }
 
 function barChart(element, pairs, color = "blue") {
+  element.classList.remove("chart-pair");
   if (!pairs.length) { element.innerHTML = `<span class="empty">Not enough history yet.</span>`; return; }
   const max = Math.max(...pairs.map((pair) => pair[1]), 1);
   element.innerHTML = pairs.map(([label, value]) => `<div class="bar-wrap" title="${escapeHtml(label)}: ${value}"><div class="bar ${color}" style="height:${Math.max(4, value / max * 100)}%"></div><span class="bar-label">${escapeHtml(label)}</span></div>`).join("");
+}
+
+function dualBarChart(element, series) {
+  element.classList.add("chart-pair");
+  element.innerHTML = series.map(({label, pairs, color}) => {
+    if (!pairs.length) return `<div class="chart-series"><span class="chart-series-label">${escapeHtml(label)}</span><span class="empty">Not enough history yet.</span></div>`;
+    const max = Math.max(...pairs.map((pair) => pair[1]), 1);
+    const bars = pairs.map(([day, value]) => `<div class="bar-wrap" title="${escapeHtml(day)}: ${value}"><div class="bar ${color}" style="height:${Math.max(4, value / max * 100)}%"></div><span class="bar-label">${escapeHtml(day)}</span></div>`).join("");
+    return `<div class="chart-series"><span class="chart-series-label">${escapeHtml(label)}</span><div class="chart">${bars}</div></div>`;
+  }).join("");
 }
 
 function horizontalChart(element, pairs, browseParam = "") {
@@ -349,24 +360,27 @@ function renderSalaryBands(rows) {
 }
 
 function renderMarket({history, status}) {
-  const usHistory = history.filter((row) => row.is_us && row.in_role);
-  const dates = [...new Set(usHistory.flatMap((row) => [row.first_seen, row.removed_date].filter(Boolean)))].sort();
+  const allHistory = history;
+  const roleHistory = history.filter((row) => row.in_role);
+  const dates = [...new Set(allHistory.flatMap((row) => [row.first_seen, row.removed_date].filter(Boolean)))].sort();
   $("#market-days").textContent = dates.length;
-  const newByDay = Object.entries(groupBy(usHistory.filter((row) => row.first_seen && !row.first_run), (row) => row.first_seen)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
-  const removedByDay = Object.entries(groupBy(usHistory.filter((row) => row.removed_date), (row) => row.removed_date)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
-  barChart($("#new-chart"), newByDay, "teal");
+  const newAllByDay = Object.entries(groupBy(allHistory.filter((row) => row.first_seen && !row.first_run), (row) => row.first_seen)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
+  const newRoleByDay = Object.entries(groupBy(roleHistory.filter((row) => row.first_seen && !row.first_run), (row) => row.first_seen)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
+  const removedByDay = Object.entries(groupBy(allHistory.filter((row) => row.removed_date), (row) => row.removed_date)).map(([date, rows]) => [date.slice(5), rows.length]).sort();
+  dualBarChart($("#new-chart"), [{label:"All postings", pairs:newAllByDay, color:"teal"}, {label:"In-role matches", pairs:newRoleByDay, color:"blue"}]);
   barChart($("#removed-chart"), removedByDay, "coral");
-  const newCount = newByDay.reduce((sum, pair) => sum + pair[1], 0);
+  const newCount = newAllByDay.reduce((sum, pair) => sum + pair[1], 0);
+  const newRoleCount = newRoleByDay.reduce((sum, pair) => sum + pair[1], 0);
   const removedCount = removedByDay.reduce((sum, pair) => sum + pair[1], 0);
   $("#new-finding").textContent = `${newCount} postings entered the market.`;
-  $("#new-explain").textContent = "The chart excludes the first-run inventory, so this is the flow observed after watching began.";
+  $("#new-explain").textContent = `${newRoleCount} matched the selected role rule. Both series exclude first-run inventory, whose start date is unknown.`;
   $("#removed-finding").textContent = `${removedCount} postings have left the watch list.`;
   $("#removed-explain").textContent = "A removal is only recorded when that employer returned a successful, fresh board response.";
-  const openRows = usHistory.filter((row) => !row.removed_date);
+  const openRows = allHistory.filter((row) => !row.removed_date);
   renderSalaryBands(openRows);
   const openByEmployer = Object.entries(groupBy(openRows, (row) => row.employer)).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]);
   horizontalChart($("#employer-chart"), openByEmployer, "employer");
-  const removedEligible = usHistory.filter((row) => row.removed_date && !row.first_run && row.first_seen);
+  const removedEligible = allHistory.filter((row) => row.removed_date && !row.first_run && row.first_seen);
   const durations = removedEligible.map((row) => daysBetween(row.first_seen, row.removed_date)).sort((a, b) => a - b);
   const median = durations.length ? durations[Math.floor(durations.length / 2)] : 0;
   $("#days-finding").textContent = `The median role lasted ${median} days.`;
@@ -378,7 +392,7 @@ function renderMarket({history, status}) {
   $("#share-finding").textContent = `${share}% were removed within seven days.`;
   $("#share-explain").textContent = "The denominator is limited to non-first-run roles old enough to qualify for the comparison.";
   $("#share-stat").textContent = `${share}%`;
-  const locations = Object.entries(groupBy(usHistory.filter((row) => !row.removed_date), (row) => row.location || "Not listed")).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const locations = Object.entries(groupBy(openRows, (row) => row.location || "Not listed")).map(([key, rows]) => [key, rows.length]).sort((a, b) => b[1] - a[1]).slice(0, 5);
   horizontalChart($("#location-chart"), locations, "location");
 }
 

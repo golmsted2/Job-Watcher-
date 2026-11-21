@@ -128,6 +128,10 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .insight-card h2 { margin-bottom: 12px; }
 .insight-card p:not(.eyebrow) { color: var(--muted); font-size: 13px; line-height: 1.55; }
 .chart { display: flex; align-items: end; justify-content: center; gap: 8px; min-height: 116px; padding: 10px 0 1px; }
+.chart-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 14px; }
+.chart-series { min-width: 0; }
+.chart-series-label { display: block; margin-bottom: 4px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.chart-series .chart { min-width: 0; }
 .chart.tall { display: grid; align-content: center; gap: 10px; min-height: 155px; }
 .bar-wrap { display: flex; align-items: end; justify-content: center; gap: 5px; height: 100%; min-width: 22px; }
 .bar { width: 100%; max-width: 25px; min-height: 3px; background: var(--blue); }
@@ -166,6 +170,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   .filter-panel { gap: 12px; }
   .insight-card.wide { display: block; }
   .chart { margin-top: 24px; }
+  .chart-pair { grid-template-columns: 1fr; }
   .market-visual img { height: 315px; }
   .market-visual-copy { max-width: 86%; padding: 24px; }
   .salary-band-chart { grid-template-columns: repeat(2, 1fr); }
