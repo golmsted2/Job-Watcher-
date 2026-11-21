@@ -21,7 +21,11 @@ const groupBy = (rows, keyFn) => rows.reduce((groups, row) => { const key = keyF
 
 async function loadData() {
   try {
-    const [historyResponse, statusResponse] = await Promise.all([fetch("./data/history.json"), fetch("./data/status.json")]);
+    const version = Date.now();
+    const [historyResponse, statusResponse] = await Promise.all([
+      fetch(`./data/history.json?v=${version}`, {cache: "no-store"}),
+      fetch(`./data/status.json?v=${version}`, {cache: "no-store"}),
+    ]);
     if (!historyResponse.ok || !statusResponse.ok) throw new Error("data unavailable");
     return {history: await historyResponse.json(), status: await statusResponse.json()};
   } catch (_error) {
