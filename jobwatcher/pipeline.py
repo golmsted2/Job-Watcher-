@@ -3,18 +3,21 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta, timezone
 import gzip
 import json
 import os
 from pathlib import Path
+import threading
 import time
 from urllib.parse import urlencode, urlsplit, urlunsplit
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from .config import Source, configured_sources
+from .config import SOURCE_BY_ID, Source, configured_sources
 from .history import build_history, build_status, issue_body, write_json
+from .normalize import _salary_from_text, normalize_posting
 
 
 def _read_json(request: Request, timeout: int) -> object:
@@ -239,6 +242,197 @@ def _write_gzip_json(path: Path, payload: dict) -> None:
         json.dump(payload, handle, ensure_ascii=False)
 
 
+SALARY_CACHE_TTL = timedelta(days=14)
+SALARY_MISS_CACHE_TTL = timedelta(days=2)
+SALARY_PAGE_MAX_BYTES = 2_000_000
+SALARY_PAGE_WORKERS = 4
+SALARY_PAGE_MIN_INTERVAL = 0.35
+SALARY_PAGE_RETRIES = 3
+_salary_request_lock = threading.Lock()
+_salary_next_request: dict[str, float] = {}
+
+
+def _salary_cache_path(processed_root: str | Path) -> Path:
+    return Path(processed_root) / "salary_cache.json"
+
+
+def _load_salary_cache(processed_root: str | Path) -> dict[str, dict]:
+    path = _salary_cache_path(processed_root)
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        return payload if isinstance(payload, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _write_salary_cache(processed_root: str | Path, cache: dict[str, dict]) -> None:
+    write_json(_salary_cache_path(processed_root), cache)
+
+
+def _cache_is_fresh(entry: dict, now: datetime) -> bool:
+    value = entry.get("checked_at") if isinstance(entry, dict) else ""
+    if not value:
+        return False
+    try:
+        checked = datetime.fromisoformat(value)
+    except ValueError:
+        return False
+    if checked.tzinfo is None:
+        checked = checked.replace(tzinfo=timezone.utc)
+    ttl = SALARY_CACHE_TTL if entry.get("text") else SALARY_MISS_CACHE_TTL
+    return now - checked < ttl
+
+
+def _wait_for_salary_request(url: str) -> None:
+    """Pace requests per employer host so ATS pages are not burst-fetched."""
+
+    host = urlsplit(url).netloc.lower()
+    if not host:
+        return
+    with _salary_request_lock:
+        current = time.monotonic()
+        scheduled = _salary_next_request.get(host, current)
+        wait = max(0.0, scheduled - current)
+        _salary_next_request[host] = max(current, scheduled) + SALARY_PAGE_MIN_INTERVAL
+    if wait:
+        time.sleep(wait)
+
+
+def _fetch_salary_page(url: str, timeout: int = 15) -> tuple[float | None, float | None, str, str]:
+    request = Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (compatible; FDA-Job-Watcher/0.1; +https://github.com/golmsted2/Job-Watcher-)",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
+    )
+    for attempt in range(SALARY_PAGE_RETRIES):
+        _wait_for_salary_request(url)
+        try:
+            with urlopen(request, timeout=timeout) as response:
+                content = response.read(SALARY_PAGE_MAX_BYTES).decode("utf-8", errors="ignore")
+            return _salary_from_text(content)
+        except HTTPError as exc:
+            if exc.code not in {429, 500, 502, 503, 504} or attempt == SALARY_PAGE_RETRIES - 1:
+                return None, None, "", ""
+            retry_after = exc.headers.get("Retry-After", "")
+            try:
+                delay = float(retry_after)
+            except (TypeError, ValueError):
+                delay = 2 ** attempt
+            time.sleep(min(max(delay, 1.0), 15.0))
+        except (URLError, TimeoutError, OSError):
+            if attempt == SALARY_PAGE_RETRIES - 1:
+                return None, None, "", ""
+            time.sleep(2 ** attempt)
+    return None, None, "", ""
+
+
+def _enrich_salary_pages(
+    source: Source,
+    jobs: list[dict],
+    cache: dict[str, dict],
+    *,
+    checked_at: datetime | None = None,
+) -> tuple[list[dict], int]:
+    """Add salary data from public application pages when the feed omits it."""
+
+    now = checked_at or datetime.now(timezone.utc)
+    pending: dict[str, tuple[dict, str]] = {}
+    enriched_count = 0
+    for raw in jobs:
+        normalized = normalize_posting(raw, source)
+        key = normalized["posting_key"]
+        if not normalized.get("is_us") or not normalized.get("in_role"):
+            continue
+        if normalized.get("salary_min") is not None or normalized.get("salary_max") is not None:
+            continue
+        cached = cache.get(key, {})
+        if _cache_is_fresh(cached, now):
+            if cached.get("text"):
+                raw["_salary_enriched"] = {
+                    "min": cached.get("min"),
+                    "max": cached.get("max"),
+                    "currency": cached.get("currency", ""),
+                    "text": cached.get("text", ""),
+                }
+                enriched_count += 1
+            continue
+        apply_url = normalized.get("apply_url", "")
+        if apply_url:
+            pending[key] = (raw, apply_url)
+
+    if pending:
+        workers = min(SALARY_PAGE_WORKERS, len(pending))
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {executor.submit(_fetch_salary_page, url): key for key, (_raw, url) in pending.items()}
+            for future in as_completed(futures):
+                key = futures[future]
+                raw, url = pending[key]
+                try:
+                    minimum, maximum, currency, text = future.result()
+                except Exception:
+                    minimum, maximum, currency, text = None, None, "", ""
+                entry = {
+                    "min": minimum,
+                    "max": maximum,
+                    "currency": currency,
+                    "text": text,
+                    "url": url,
+                    "checked_at": now.isoformat(),
+                }
+                cache[key] = entry
+                if text:
+                    raw["_salary_enriched"] = {"min": minimum, "max": maximum, "currency": currency, "text": text}
+                    enriched_count += 1
+    return jobs, enriched_count
+
+
+def _source_from_envelope(source_id: str, envelope: dict) -> Source:
+    metadata = envelope.get("source")
+    if isinstance(metadata, dict):
+        return Source(
+            metadata["id"], metadata["employer"], metadata["ats"], metadata.get("endpoint", ""),
+        )
+    return SOURCE_BY_ID[source_id]
+
+
+def enrich_existing_snapshot(
+    *,
+    raw_root: str | Path = "data/raw",
+    processed_root: str | Path = "data/processed",
+    site_data_root: str | Path = "site/data",
+    run_date: str | None = None,
+) -> dict:
+    """Enrich the latest raw snapshot without refetching ATS feeds."""
+
+    root = Path(raw_root)
+    days = sorted(path for path in root.iterdir() if path.is_dir()) if root.exists() else []
+    if not days:
+        return build_outputs(raw_root=raw_root, processed_root=processed_root, site_data_root=site_data_root)
+    day_dir = root / (run_date or days[-1].name)
+    cache = _load_salary_cache(processed_root)
+    status_path = day_dir / "_status.json"
+    status = json.loads(status_path.read_text(encoding="utf-8")) if status_path.exists() else {"sources": []}
+    for path in sorted(day_dir.glob("*.json.gz")):
+        with gzip.open(path, "rt", encoding="utf-8") as handle:
+            envelope = json.load(handle)
+        source_id = path.stem.removesuffix(".json")
+        source = _source_from_envelope(source_id, envelope)
+        jobs, enriched_count = _enrich_salary_pages(source, envelope.get("jobs", []), cache)
+        envelope["jobs"] = jobs
+        _write_gzip_json(path, envelope)
+        for item in status.get("sources", []):
+            if item.get("id") == source.id:
+                item["salary_enriched"] = enriched_count
+    write_json(status_path, status)
+    _write_salary_cache(processed_root, cache)
+    return build_outputs(raw_root=raw_root, processed_root=processed_root, site_data_root=site_data_root)
+
+
 def build_outputs(
     *,
     raw_root: str | Path = "data/raw",
@@ -276,6 +470,7 @@ def run_pipeline(
     day_dir.mkdir(parents=True, exist_ok=True)
     statuses: list[dict] = []
     raw_file_count = 0
+    salary_cache = _load_salary_cache(processed_root)
 
     for source in sources:
         status = {
@@ -290,6 +485,7 @@ def run_pipeline(
         }
         try:
             jobs = fetch_json(source)
+            jobs, salary_enriched = _enrich_salary_pages(source, jobs, salary_cache)
             _write_gzip_json(day_dir / f"{source.id}.json.gz", {
                 "source": {"id": source.id, "employer": source.employer, "ats": source.ats, "endpoint": source.endpoint},
                 "run_date": day,
@@ -297,11 +493,13 @@ def run_pipeline(
             })
             status["ok"] = True
             status["item_count"] = len(jobs)
+            status["salary_enriched"] = salary_enriched
             raw_file_count += 1
         except Exception as exc:  # one source must never stop the run
             status["error"] = f"{type(exc).__name__}: {exc}"
         statuses.append(status)
 
+    _write_salary_cache(processed_root, salary_cache)
     write_json(day_dir / "_status.json", {
         "run_date": day,
         "run_utc": run_utc,
@@ -317,8 +515,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--date", help="UTC run date in YYYY-MM-DD format")
     parser.add_argument("--build-only", action="store_true", help="rebuild outputs from existing raw files without fetching")
+    parser.add_argument("--enrich-salaries", action="store_true", help="fetch public job pages for missing salary data in the latest raw snapshot")
     args = parser.parse_args()
-    status = build_outputs() if args.build_only else run_pipeline(run_date=args.date)
+    if args.enrich_salaries:
+        status = enrich_existing_snapshot(run_date=args.date)
+    else:
+        status = build_outputs() if args.build_only else run_pipeline(run_date=args.date)
     print(json.dumps(status, indent=2))
 
 

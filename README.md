@@ -14,6 +14,7 @@ FDA Job Watcher is a daily, public job-market tracker for the Financial Data Ana
 - **Run status:** `data/processed/status.json`.
 - **Published site data:** `site/data/history.json` and `site/data/status.json`.
 - **Candidate signals:** salary ranges (including ranges embedded in published ATS descriptions), annualized salary values, work model, internship/new-grad signals, sponsorship language, degree language, freshness, match score, and a normalized duplicate key are derived during normalization.
+- **Salary enrichment:** when a US finance/early-career posting has no salary in its feed, the pipeline checks the public employer application page and extracts a published salary or compensation range when present. Successful page results are cached for 14 days; no-salary or temporarily blocked results are retried after 2 days. The collector never invents a salary when the original page does not publish one.
 - **Privacy:** favorites, application status, and private notes stay in the browser's local storage; they are not committed to the repository or sent to the site.
 - **Portable workspace:** saved searches, profile skills, resume text, application deadlines, and analytics can be exported/imported as a local JSON backup. This is the static-site substitute for cross-device accounts until a server-side identity and database are added.
 
@@ -38,6 +39,12 @@ uv run python -m jobwatcher.pipeline --date 2026-11-20
 ```
 
 The pipeline calls every enabled source, continues after individual failures, writes raw snapshots, rebuilds history from raw files alone, updates the two processed files, and writes the daily issue body to `data/processed/issue.md`.
+
+To enrich an existing raw snapshot from employer application pages without refetching the ATS feeds:
+
+```text
+uv run python -m jobwatcher.pipeline --enrich-salaries --date 2026-11-20
+```
 
 To preview the site, serve the `site` directory with any static HTTP server. The site has a built-in demo fallback when opened directly from disk, but a local server is needed to test the service worker and published JSON files.
 

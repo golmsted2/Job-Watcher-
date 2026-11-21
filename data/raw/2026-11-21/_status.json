@@ -12,7 +12,8 @@
       "ok": true,
       "item_count": 200,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 1
     },
     {
       "id": "stifel",
@@ -22,7 +23,8 @@
       "ok": true,
       "item_count": 161,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "jpmorgan-chase",
@@ -32,7 +34,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "bank-of-america",
@@ -42,7 +45,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 1
     },
     {
       "id": "citi",
@@ -52,7 +56,8 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 12
     },
     {
       "id": "wells-fargo",
@@ -62,7 +67,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 38
     },
     {
       "id": "goldman-sachs",
@@ -72,7 +78,8 @@
       "ok": true,
       "item_count": 190,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "morgan-stanley",
@@ -82,7 +89,8 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 13
     },
     {
       "id": "pnc",
@@ -92,7 +100,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 48
     },
     {
       "id": "us-bank",
@@ -102,7 +111,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 210
     },
     {
       "id": "state-street",
@@ -112,7 +122,8 @@
       "ok": true,
       "item_count": 1000,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 44
     },
     {
       "id": "bny",
@@ -122,7 +133,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "american-express",
@@ -132,7 +144,8 @@
       "ok": true,
       "item_count": 392,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "capital-one",
@@ -142,7 +155,8 @@
       "ok": true,
       "item_count": 330,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 4
     },
     {
       "id": "northern-trust",
@@ -152,7 +166,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "salary_enriched": 23
     }
   ]
 }
