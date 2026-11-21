@@ -1,6 +1,6 @@
 {
   "run_date": "2026-11-21",
-  "run_utc": "2026-11-21T01:02:59.597770+00:00",
+  "run_utc": "2026-11-21T14:18:18.122155+00:00",
   "pipeline_ok": true,
   "raw_file_count": 15,
   "sources": [
@@ -12,7 +12,7 @@
       "ok": true,
       "item_count": 200,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "stifel",
@@ -22,7 +22,7 @@
       "ok": true,
       "item_count": 161,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "jpmorgan-chase",
@@ -32,7 +32,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "bank-of-america",
@@ -42,7 +42,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "citi",
@@ -52,7 +52,7 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "wells-fargo",
@@ -62,7 +62,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "goldman-sachs",
@@ -72,7 +72,7 @@
       "ok": true,
       "item_count": 190,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "morgan-stanley",
@@ -82,7 +82,7 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "pnc",
@@ -92,7 +92,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "us-bank",
@@ -102,7 +102,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "state-street",
@@ -112,7 +112,7 @@
       "ok": true,
       "item_count": 1000,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "bny",
@@ -122,7 +122,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "american-express",
@@ -130,9 +130,9 @@
       "ats": "Oracle",
       "endpoint": "https://egug.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
       "ok": true,
-      "item_count": 400,
+      "item_count": 392,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "capital-one",
@@ -140,9 +140,9 @@
       "ats": "Workday",
       "endpoint": "https://capitalone.wd12.myworkdayjobs.com/wday/cxs/capitalone/Capital_One/jobs",
       "ok": true,
-      "item_count": 328,
+      "item_count": 330,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     },
     {
       "id": "northern-trust",
@@ -152,7 +152,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T01:02:59.597770+00:00"
+      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00"
     }
   ]
 }
