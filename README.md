@@ -2,7 +2,7 @@
 
 ![Tests](https://github.com/OWNER/REPOSITORY/actions/workflows/tests.yml/badge.svg)
 
-FDA Job Watcher is a daily, public job-market tracker for the Financial Data Analytics project. It watches public applicant-tracking-system JSON endpoints, saves compressed raw snapshots, rebuilds a deterministic posting history, and publishes a browser-calculated three-page site.
+FDA Job Watcher is a daily, public job-market tracker for the Financial Data Analytics project. It watches public applicant-tracking-system JSON endpoints, saves compressed raw snapshots, rebuilds a deterministic posting history, and publishes a browser-calculated finance job site.
 
 ## Current project choices
 
@@ -13,6 +13,8 @@ FDA Job Watcher is a daily, public job-market tracker for the Financial Data Ana
 - **Canonical history:** `data/processed/history.json` (descriptions remain in compressed raw evidence so the browser file stays small).
 - **Run status:** `data/processed/status.json`.
 - **Published site data:** `site/data/history.json` and `site/data/status.json`.
+- **Candidate signals:** salary ranges, work model, internship/new-grad signals, sponsorship language, degree language, freshness, match score, and a normalized duplicate key are derived during normalization.
+- **Privacy:** favorites, application status, and private notes stay in the browser's local storage; they are not committed to the repository or sent to the site.
 
 ## Board and aggregator sources
 
@@ -44,10 +46,13 @@ After changing the role rule, rebuild the existing raw evidence without refetchi
 uv run python -m jobwatcher.pipeline --build-only
 ```
 
+Optional email alerts use the Resend API. Add `RESEND_API_KEY`, `ALERT_EMAIL` (one or more comma-separated recipients), and `ALERT_FROM_EMAIL` as GitHub Actions repository secrets. The daily workflow remains a no-op for email until all three values are present.
+
 ## Site pages
 
 - **Today:** latest run time, source health, open/new/removed counts, and daily changes.
-- **Browse:** role/all toggle, employer/location/age filters, title search, sorting, apply links, and browser-local favorites.
+- **Browse:** role/all toggle, employer/location/age filters, work model, new-grad/internship stage, sponsorship, degree, salary, application status, title search, sorting, apply links, match scores, freshness, duplicate suppression, and browser-local application tracking.
+- **Companies:** a profile view for all 15 tracked employers, current open-match counts, feed type, early-career counts, and links into company-filtered roles.
 - **Market:** six calculations from history: new per day, removed per day, open postings by employer, median days open, removed within seven days, and top open locations.
 
 The site includes a manifest and service worker. Data requests are network-first and fall back to the last cached copy when offline.

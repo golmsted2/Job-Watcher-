@@ -27,6 +27,12 @@ jobs:
           USAJOBS_EMAIL: ${{ secrets.USAJOBS_EMAIL }}
           USAJOBS_API_KEY: ${{ secrets.USAJOBS_API_KEY }}
         run: python -m jobwatcher.pipeline --date "$(date -u +%F)"
+      - name: Send optional email alerts
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          ALERT_FROM_EMAIL: ${{ secrets.ALERT_FROM_EMAIL }}
+        run: python -m jobwatcher.alerts
       - name: Close previous issues and open today's issue
         env:
           GH_TOKEN: ${{ github.token }}

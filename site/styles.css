@@ -137,3 +137,48 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
   .footer { display: block; line-height: 1.8; }
 }
 
+.posting-main { min-width: 0; }
+.posting-topline { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.match-score { padding: 4px 7px; color: #126258; background: #e2f3ed; font-size: 10px; font-weight: 850; letter-spacing: .04em; text-transform: uppercase; }
+.freshness { padding: 4px 7px; font-size: 10px; font-weight: 850; letter-spacing: .04em; text-transform: uppercase; }
+.freshness.fresh { color: #146a5d; background: #d8f3e8; }
+.freshness.recent { color: #85600d; background: #fff2c9; }
+.freshness.older { color: var(--muted); background: #eef1f0; }
+.posted-label { color: var(--muted); font-size: 11px; }
+.posting-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; margin-top: 14px; color: var(--muted); font-size: 11px; }
+.posting-salary { color: var(--navy); font-size: 13px; font-weight: 850; }
+.posting-salary.salary-missing { color: var(--muted); font-weight: 600; }
+.tracker-box { display: grid; grid-template-columns: 175px 1fr; gap: 10px; margin-top: 16px; padding-top: 13px; border-top: 1px solid #e6ebea; }
+.tracker-box label { display: grid; gap: 5px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.tracker-box select, .tracker-box textarea { min-height: 32px; padding: 6px 8px; border: 1px solid #d8e0df; color: var(--ink); background: #fff; font-size: 12px; letter-spacing: normal; text-transform: none; resize: vertical; }
+.tracker-box textarea { min-height: 32px; }
+.company-detail { margin-bottom: 18px; }
+.company-detail-heading { display: flex; align-items: center; gap: 16px; }
+.company-detail-heading h2 { margin: 4px 0 6px; }
+.company-detail-heading p:not(.eyebrow) { max-width: 660px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.company-metrics { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 22px; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+.company-metrics strong { display: block; margin-bottom: 3px; color: var(--navy); font: 700 24px/1 Georgia, serif; }
+.company-source { margin: 18px 0 0; color: var(--muted); font-size: 12px; }
+.company-source a { color: var(--teal); font-weight: 800; text-decoration: none; }
+.company-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.company-summary { max-width: 210px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.company-card { display: block; padding: 19px; border: 1px solid var(--line); color: var(--ink); background: var(--card); text-decoration: none; transition: border-color .15s, transform .15s; }
+.company-card:hover, .company-card.selected { border-color: var(--teal); transform: translateY(-2px); }
+.company-heading { display: flex; align-items: center; gap: 10px; }
+.company-heading strong { display: block; color: var(--navy); font: 700 18px/1.1 Georgia, serif; }
+.company-heading small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+.company-card p { min-height: 43px; margin: 16px 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.company-monogram { display: grid; place-items: center; flex: 0 0 43px; width: 43px; height: 43px; color: white; background: var(--navy); font-size: 12px; font-weight: 850; letter-spacing: .06em; }
+.company-detail .company-monogram { flex-basis: 54px; width: 54px; height: 54px; font-size: 14px; }
+.company-roles { display: flex; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid #e5ebea; color: var(--teal); font-size: 11px; font-weight: 800; }
+
+@media (max-width: 900px) {
+  .company-grid { grid-template-columns: repeat(2, 1fr); }
+  .tracker-box { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 620px) {
+  .company-grid, .tracker-box { grid-template-columns: 1fr; }
+  .company-detail-heading { align-items: flex-start; }
+  .company-metrics { gap: 15px; }
+}
+

@@ -119,3 +119,25 @@ def test_oracle_record_maps_finance_and_secondary_source_fields():
     assert row["in_role"] is True
 
 
+def test_normalize_adds_salary_and_early_career_signals():
+    row = normalize_posting(
+        {
+            "id": "salary-1",
+            "title": "2027 Credit Analyst Program",
+            "location": {"name": "Dallas, TX"},
+            "content": "Recent graduates welcome. Bachelor's degree required. Visa sponsorship available.",
+            "salary": {"min": 72000, "max": 88000, "currency": "USD"},
+            "absolute_url": "https://example.test/salary-1",
+        },
+        Source("greenhouse-test", "Test Bank", "Greenhouse", "https://example.test/greenhouse"),
+    )
+
+    assert row["salary_min"] == 72000
+    assert row["salary_max"] == 88000
+    assert row["salary_currency"] == "USD"
+    assert row["is_new_grad"] is True
+    assert row["sponsorship"] == "mentioned"
+    assert row["degree_requirement"] == "mentioned"
+    assert row["duplicate_key"] == "test bank 2027 credit analyst program dallas tx"
+
+

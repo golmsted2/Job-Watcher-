@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1b2a">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Job Watcher · Companies</title>
+</head>
+<body data-page="companies">
+  <header class="topbar">
+    <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
+    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a href="./browse.html">Browse</a><a class="active" href="./companies.html">Companies</a><a href="./market.html">Market</a></nav>
+    <span class="offline-pill" id="network-status">Online-ready</span>
+  </header>
+  <main class="page-shell">
+    <section class="hero compact-hero"><div><p class="eyebrow">Company profiles · finance watch list</p><h1>Know the names behind the <em>roles.</em></h1><p class="lede">Explore the 15 tracked finance employers, their hiring focus, feed health, and open early-career matches.</p></div><div class="hero-number company-summary" id="company-summary">—</div></section>
+    <section id="company-detail" class="panel company-detail"></section>
+    <section id="company-list" class="company-grid" aria-live="polite"></section>
+  </main>
+  <footer class="footer"><span>FDA Job Watcher</span><span>Company counts use the current US finance / early-career view.</span></footer>
+  <script src="./app.js"></script>
+</body>
+</html>

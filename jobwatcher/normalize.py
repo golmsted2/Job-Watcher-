@@ -20,6 +20,10 @@ CANONICAL_COLUMNS = (
     "team",
     "employment_type",
     "workplace_type",
+    "salary_min",
+    "salary_max",
+    "salary_currency",
+    "salary_text",
     "description",
     "apply_url",
     "posted_at",
@@ -28,6 +32,11 @@ CANONICAL_COLUMNS = (
     "removed_date",
     "in_role",
     "is_us",
+    "is_internship",
+    "is_new_grad",
+    "sponsorship",
+    "degree_requirement",
+    "duplicate_key",
     "first_run",
 )
 
@@ -62,6 +71,113 @@ def _date_or_empty(value: Any) -> str:
         # Lever returns milliseconds since epoch.
         return datetime.fromtimestamp(value / 1000, tz=timezone.utc).isoformat()
     return str(value).strip()
+
+
+def _number(value: Any) -> float | None:
+    if value is None or value == "":
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    match = re.search(r"\d[\d,]*(?:\.\d+)?", str(value))
+    if not match:
+        return None
+    return float(match.group(0).replace(",", ""))
+
+
+def _salary(raw: dict[str, Any], ats: str) -> tuple[float | None, float | None, str, str]:
+    minimum: float | None = None
+    maximum: float | None = None
+    currency = ""
+    text = ""
+
+    if ats == "greenhouse":
+        ranges = raw.get("pay_input_ranges") or []
+        if ranges:
+            band = ranges[0] if isinstance(ranges[0], dict) else {}
+            minimum = _number(band.get("min_cents"))
+            maximum = _number(band.get("max_cents"))
+            if minimum is not None:
+                minimum /= 100
+            if maximum is not None:
+                maximum /= 100
+            currency = _text(band.get("currency"))
+            text = _text(band.get("interval"))
+    elif ats == "adzuna":
+        minimum = _number(raw.get("salary_min"))
+        maximum = _number(raw.get("salary_max"))
+        currency = _text(raw.get("salary_currency"))
+    elif ats == "usajobs":
+        bands = raw.get("PositionRemuneration") or []
+        if bands and isinstance(bands[0], dict):
+            band = bands[0]
+            minimum = _number(band.get("MinimumRange"))
+            maximum = _number(band.get("MaximumRange"))
+            currency = _text(band.get("CurrencyCode")) or "USD"
+            text = _text(band.get("RateIntervalCode"))
+    elif ats in {"jibe", "phenom"}:
+        minimum = _number(raw.get("salary_min_value") or raw.get("salary_min"))
+        maximum = _number(raw.get("salary_max_value") or raw.get("salary_max"))
+        currency = _text(raw.get("salary_currency"))
+        text = _text(raw.get("salary"))
+    else:
+        value = raw.get("salary") or raw.get("salary_text") or raw.get("compensation")
+        if isinstance(value, dict):
+            minimum = _number(value.get("min") or value.get("minimum") or value.get("minValue"))
+            maximum = _number(value.get("max") or value.get("maximum") or value.get("maxValue"))
+            currency = _text(value.get("currency") or value.get("currencyCode"))
+            text = _text(value.get("text"))
+        else:
+            text = _text(value)
+            numbers = re.findall(r"\$?\s*\d[\d,]*(?:\.\d+)?", text)
+            if numbers:
+                minimum = _number(numbers[0])
+                maximum = _number(numbers[-1])
+
+    # Some feeds expose the salary object without using the adapter's usual
+    # field names. Keep the signal instead of dropping it as an unknown field.
+    if minimum is None and maximum is None and not text:
+        value = raw.get("salary") or raw.get("salary_text") or raw.get("compensation")
+        if isinstance(value, dict):
+            minimum = _number(value.get("min") or value.get("minimum") or value.get("minValue"))
+            maximum = _number(value.get("max") or value.get("maximum") or value.get("maxValue"))
+            currency = _text(value.get("currency") or value.get("currencyCode"))
+            text = _text(value.get("text"))
+        else:
+            text = _text(value)
+            numbers = re.findall(r"\$?\s*\d[\d,]*(?:\.\d+)?", text)
+            if numbers:
+                minimum = _number(numbers[0])
+                maximum = _number(numbers[-1])
+
+    if not currency and (minimum is not None or maximum is not None or "$" in text):
+        currency = "USD"
+    if not text and (minimum is not None or maximum is not None):
+        low = f"${minimum:,.0f}" if minimum is not None else ""
+        high = f"${maximum:,.0f}" if maximum is not None else ""
+        text = f"{low}–{high}" if low and high and low != high else (low or high)
+    return minimum, maximum, currency, text
+
+
+def _signals(title: str, description: str, workplace_type: str) -> tuple[bool, bool, str, str]:
+    text = f"{title} {description}".lower()
+    internship = bool(re.search(r"\b(?:intern(?:ship)?|summer analyst|campus program)\b", text))
+    new_grad = bool(re.search(r"\b(?:new grad(?:uate)?|early career|recent graduate|students?\s*&?\s*grads?|rotational|campus|university|analyst program)\b|\b20(?:2[6-9]|3\d)\b", text))
+    if re.search(r"(?:will not|does not|no)\s+(?:provide\s+)?(?:visa|employment|immigration)?\s*sponsorship|without sponsorship|not sponsor", text):
+        sponsorship = "no"
+    elif re.search(r"sponsor(?:ship)?|visa|work authorization|immigration", text):
+        sponsorship = "mentioned"
+    else:
+        sponsorship = "unknown"
+    if re.search(r"\b(?:bachelor(?:'s)?|master(?:'s)?|doctoral|phd|degree required|college degree)\b", text):
+        degree = "mentioned"
+    else:
+        degree = "not-listed"
+    return internship, new_grad, sponsorship, degree
+
+
+def _duplicate_key(employer: str, title: str, location: str) -> str:
+    value = " ".join((employer, title, location)).lower()
+    return re.sub(r"[^a-z0-9]+", " ", value).strip()
 
 
 def _location(source: Source, raw: dict[str, Any]) -> str:
@@ -131,7 +247,7 @@ def _team(source: Source, raw: dict[str, Any]) -> str:
 
 
 def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
-    """Return one canonical posting row for Greenhouse, Lever, or Ashby."""
+    """Return one canonical posting row for the supported public ATS feeds."""
 
     ats = source.ats.lower()
     source_id = _text(
@@ -237,6 +353,11 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         posted_at = _date_or_empty(raw.get("publishedAt"))
 
     location = _location(source, raw)
+    if not workplace_type:
+        workplace_match = re.search(r"\b(remote|hybrid|on[- ]?site)\b", f"{title} {location} {description}", re.IGNORECASE)
+        workplace_type = workplace_match.group(1).title() if workplace_match else ""
+    salary_min, salary_max, salary_currency, salary_text = _salary(raw, ats)
+    is_internship, is_new_grad, sponsorship, degree_requirement = _signals(title, description, workplace_type)
     return {
         "posting_key": f"{source.id}:{source_id}",
         "employer": employer,
@@ -247,6 +368,10 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         "team": _team(source, raw),
         "employment_type": employment_type,
         "workplace_type": workplace_type,
+        "salary_min": salary_min,
+        "salary_max": salary_max,
+        "salary_currency": salary_currency,
+        "salary_text": salary_text,
         "description": description,
         "apply_url": apply_url,
         "posted_at": posted_at,
@@ -255,6 +380,11 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         "removed_date": "",
         "in_role": is_us_location(location) and is_in_role(title, description),
         "is_us": is_us_location(location),
+        "is_internship": is_internship,
+        "is_new_grad": is_new_grad,
+        "sponsorship": sponsorship,
+        "degree_requirement": degree_requirement,
+        "duplicate_key": _duplicate_key(employer, title, location),
         "first_run": False,
     }
 

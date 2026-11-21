@@ -71,7 +71,12 @@ def build_history(raw_root: str | Path) -> list[dict[str, Any]]:
                     records[key] = normalized
                 else:
                     record = records[key]
-                    for field in ("title", "location", "team", "employment_type", "workplace_type", "apply_url", "posted_at", "in_role"):
+                    for field in (
+                        "title", "location", "team", "employment_type", "workplace_type",
+                        "salary_min", "salary_max", "salary_currency", "salary_text", "apply_url",
+                        "posted_at", "in_role", "is_us", "is_internship", "is_new_grad",
+                        "sponsorship", "degree_requirement", "duplicate_key",
+                    ):
                         if normalized[field]:
                             record[field] = normalized[field]
                     record["last_seen"] = day

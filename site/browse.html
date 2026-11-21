@@ -11,7 +11,7 @@
 <body data-page="browse">
   <header class="topbar">
     <a class="brand" href="./index.html"><span class="brand-mark">JW</span><span>Job Watcher</span></a>
-    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a class="active" href="./browse.html">Browse</a><a href="./market.html">Market</a></nav>
+    <nav aria-label="Primary navigation"><a href="./index.html">Today</a><a class="active" href="./browse.html">Browse</a><a href="./companies.html">Companies</a><a href="./market.html">Market</a></nav>
     <span class="offline-pill" id="network-status">Online-ready</span>
   </header>
   <main class="page-shell">
@@ -20,9 +20,15 @@
       <label class="toggle-label"><input id="role-toggle" type="checkbox" checked><span class="toggle"></span><span>Only postings in my role</span></label>
       <label>Employer<select id="employer-filter"><option value="">All employers</option></select></label>
       <label>Location<select id="location-filter"><option value="">All locations</option></select></label>
+      <label>Stage<select id="stage-filter"><option value="">All early-career</option><option value="new-grad">New grad / early career</option><option value="internship">Internship / campus</option></select></label>
+      <label>Work model<select id="work-model-filter"><option value="">Any model</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option><option value="on-site">On-site</option></select></label>
+      <label>Sponsorship<select id="sponsorship-filter"><option value="">Any sponsorship signal</option><option value="mentioned">Mentioned</option><option value="unknown">Not listed</option><option value="no">No sponsorship</option></select></label>
+      <label>Degree<select id="degree-filter"><option value="">Any degree signal</option><option value="mentioned">Degree mentioned</option><option value="not-listed">Not listed</option></select></label>
+      <label>Salary<select id="salary-filter"><option value="">Any salary</option><option value="listed">Salary listed</option><option value="100k">$100k+ range</option></select></label>
+      <label>My tracker<select id="tracking-filter"><option value="">All applications</option><option value="saved">Saved</option><option value="not-started">Not started</option><option value="Applied">Applied</option><option value="Interview">Interview</option><option value="Offer">Offer</option><option value="Closed">Closed</option></select></label>
       <label>Days open<select id="days-filter"><option value="">Any age</option><option value="7">7+ days</option><option value="14">14+ days</option><option value="30">30+ days</option></select></label>
       <label class="search-label">Search title<input id="title-search" type="search" placeholder="e.g. analyst"></label>
-      <label>Sort<select id="sort-filter"><option value="newest">First seen · newest</option><option value="oldest">First seen · oldest</option><option value="employer">Employer A–Z</option></select></label>
+      <label>Sort<select id="sort-filter"><option value="newest">First seen · newest</option><option value="match">Match score</option><option value="salary">Highest salary</option><option value="oldest">First seen · oldest</option><option value="employer">Employer A–Z</option></select></label>
     </section>
     <div class="browse-toolbar"><span id="browse-summary">Loading postings…</span><span class="shortlist-note">★ saves to this browser</span></div>
     <section id="posting-list" class="posting-list" aria-live="polite"></section>
