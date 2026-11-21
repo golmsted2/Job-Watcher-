@@ -172,7 +172,7 @@ function currentSearch() {
     workplace:$("#work-model-filter")?.value || "",
     sponsorship:$("#sponsorship-filter")?.value || "",
     degree:$("#degree-filter")?.value || "",
-    salary:$("#salary-filter")?.value === "listed" ? "listed" : $("#salary-filter")?.value === "100k" ? "100000" : "",
+    salary:$("#salary-filter")?.value || "",
     remoteOnly:false,
   };
 }
@@ -250,7 +250,7 @@ function renderBrowse({history, status}) {
       const app = applicationFor(state.applications, row.posting_key);
       const rowModel = workplace(row).toLowerCase();
       const salaryKnown = annualSalary(row).low || annualSalary(row).high;
-      return (!state.roleOnly || row.in_role) && (!employerSelect.value || row.employer === employerSelect.value) && (!locationSelect.value || row.location === locationSelect.value) && (!titleQuery || String(row.title).toLowerCase().includes(titleQuery)) && (!stage || (stage === "internship" ? row.is_internship : stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!program || programType(row) === program) && (!model || rowModel === model) && (!sponsorship || row.sponsorship === sponsorship) && (!degree || row.degree_requirement === degree) && (!salary || (salary === "listed" ? salaryKnown : annualSalary(row).high >= 100000)) && (!tracking || (tracking === "saved" ? state.favorites.has(row.posting_key) : tracking === "not-started" ? app.status === "Not started" : app.status === tracking));
+      return (!state.roleOnly || row.in_role) && (!employerSelect.value || row.employer === employerSelect.value) && (!locationSelect.value || row.location === locationSelect.value) && (!titleQuery || String(row.title).toLowerCase().includes(titleQuery)) && (!stage || (stage === "internship" ? row.is_internship : stage === "new-grad" ? row.is_new_grad : row.in_role)) && (!program || programType(row) === program) && (!model || rowModel === model) && (!sponsorship || row.sponsorship === sponsorship) && (!degree || row.degree_requirement === degree) && (!salary || (salary === "listed" ? salaryKnown : annualSalary(row).high >= Number(salary))) && (!tracking || (tracking === "saved" ? state.favorites.has(row.posting_key) : tracking === "not-started" ? app.status === "Not started" : app.status === tracking));
     });
     const age = Number($("#days-filter").value || 0);
     if (age) rows = rows.filter((row) => daysBetween(row.first_seen, latestDate) >= age);
