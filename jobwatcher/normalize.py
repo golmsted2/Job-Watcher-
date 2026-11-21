@@ -65,20 +65,37 @@ def _date_or_empty(value: Any) -> str:
 
 
 def _location(source: Source, raw: dict[str, Any]) -> str:
-    if source.ats.lower() == "greenhouse":
+    ats = source.ats.lower()
+    if ats == "greenhouse":
         location = raw.get("location")
         if isinstance(location, dict):
             return _text(location.get("name"))
         return _text(location)
-    if source.ats.lower() == "lever":
+    if ats == "lever":
         categories = raw.get("categories") or {}
         return _text(categories.get("location") or raw.get("location"))
-    if source.ats.lower() == "adzuna":
+    if ats == "adzuna":
         return _text(raw.get("location"))
-    if source.ats.lower() == "jooble":
+    if ats == "jooble":
         return _text(raw.get("location"))
-    if source.ats.lower() == "usajobs":
+    if ats == "usajobs":
         return _text(raw.get("PositionLocationDisplay") or raw.get("PositionLocation"))
+    if ats == "workday":
+        return _text(raw.get("locationsText") or raw.get("location"))
+    if ats == "oracle":
+        return _text(raw.get("PrimaryLocation") or raw.get("location"))
+    if ats == "phenom":
+        if raw.get("country") or raw.get("state") or raw.get("city"):
+            parts = [raw.get("city"), raw.get("state"), raw.get("country")]
+            return ", ".join(_text(part) for part in parts if _text(part))
+        return _text(raw.get("location") or raw.get("cityStateCountry") or raw.get("locationLatlong"))
+    if ats == "eightfold":
+        return _text(raw.get("locations") or raw.get("location"))
+    if ats == "jibe":
+        return _text(raw.get("location") or raw.get("full_location"))
+    if ats == "mcloud":
+        parts = [raw.get("primary_city"), raw.get("primary_state"), raw.get("primary_country")]
+        return ", ".join(_text(part) for part in parts if _text(part))
     location = raw.get("location")
     if isinstance(location, list):
         return ", ".join(_text(item) for item in location)
@@ -86,16 +103,30 @@ def _location(source: Source, raw: dict[str, Any]) -> str:
 
 
 def _team(source: Source, raw: dict[str, Any]) -> str:
-    if source.ats.lower() == "greenhouse":
+    ats = source.ats.lower()
+    if ats == "greenhouse":
         departments = raw.get("departments") or []
         return ", ".join(_text(item.get("name") if isinstance(item, dict) else item) for item in departments)
-    if source.ats.lower() == "lever":
+    if ats == "lever":
         categories = raw.get("categories") or {}
         return _text(categories.get("team") or categories.get("department"))
-    if source.ats.lower() == "adzuna":
+    if ats == "adzuna":
         return _text((raw.get("category") or {}).get("label"))
-    if source.ats.lower() == "usajobs":
+    if ats == "usajobs":
         return _text(raw.get("JobCategory") or raw.get("JobCategoryName"))
+    if ats == "workday":
+        return _text(raw.get("bulletFields") or raw.get("jobFamily") or raw.get("jobFunction"))
+    if ats == "oracle":
+        return _text(raw.get("JobFamily") or raw.get("JobFunction") or raw.get("Department"))
+    if ats == "phenom":
+        categories = raw.get("multi_category") or raw.get("category")
+        return _text(categories)
+    if ats == "eightfold":
+        return _text(raw.get("department"))
+    if ats == "jibe":
+        return _text(raw.get("department") or raw.get("category"))
+    if ats == "mcloud":
+        return _text(raw.get("function") or raw.get("primary_category"))
     return _text(raw.get("department") or raw.get("team"))
 
 
@@ -103,8 +134,20 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
     """Return one canonical posting row for Greenhouse, Lever, or Ashby."""
 
     ats = source.ats.lower()
-    source_id = _text(raw.get("id") or raw.get("jobId") or raw.get("job_id") or raw.get("PositionID"))
-    title = _text(raw.get("title") or raw.get("text") or raw.get("name") or raw.get("PositionTitle"))
+    source_id = _text(
+        raw.get("_source_id")
+        or raw.get("id")
+        or raw.get("Id")
+        or raw.get("jobId")
+        or raw.get("job_id")
+        or raw.get("PositionID")
+        or raw.get("req_id")
+        or raw.get("reqId")
+        or raw.get("jobSeqNo")
+        or (raw.get("bulletFields") or [None])[0]
+        or raw.get("externalPath")
+    )
+    title = _text(raw.get("title") or raw.get("text") or raw.get("name") or raw.get("PositionTitle") or raw.get("Title"))
     employer = source.employer
     if ats in {"adzuna", "jooble"}:
         employer = _text(raw.get("company")) or source.employer
@@ -142,6 +185,50 @@ def normalize_posting(raw: dict[str, Any], source: Source) -> dict[str, Any]:
         employment_type = _text(raw.get("PositionSchedule"))
         workplace_type = "Remote" if "remote" in f"{title} {_location(source, raw)}".lower() else ""
         posted_at = _date_or_empty(raw.get("PublicationStartDate"))
+    elif ats == "workday":
+        apply_url = _text(raw.get("_apply_url") or raw.get("url"))
+        description = strip_html(raw.get("description"))
+        employment_type = _text(raw.get("timeType"))
+        workplace_type = _text(raw.get("remoteType"))
+        posted_at = _date_or_empty(raw.get("postedOn"))
+    elif ats == "oracle":
+        apply_url = _text(raw.get("_apply_url") or raw.get("url"))
+        description = strip_html(
+            raw.get("ShortDescriptionStr")
+            or raw.get("ExternalQualificationsStr")
+            or raw.get("ExternalResponsibilitiesStr")
+        )
+        employment_type = _text(raw.get("WorkerType") or raw.get("JobType") or raw.get("JobSchedule"))
+        workplace_type = _text(raw.get("WorkplaceType") or raw.get("WorkplaceTypeCode"))
+        posted_at = _date_or_empty(raw.get("PostedDate"))
+    elif ats == "phenom":
+        apply_url = _text(raw.get("applyUrl") or raw.get("url"))
+        description = strip_html(raw.get("description") or raw.get("descriptionTeaser") or (raw.get("ml_job_parser") or {}).get("descriptionTeaser_ats"))
+        employment_type = _text(raw.get("type"))
+        workplace_type = _text(raw.get("workLocationOption"))
+        posted_at = _date_or_empty(raw.get("postedDate"))
+    elif ats == "eightfold":
+        apply_url = _text(raw.get("_apply_url") or raw.get("positionUrl") or raw.get("url"))
+        description = strip_html(raw.get("description"))
+        employment_type = _text(raw.get("employmentType"))
+        workplace_type = _text(raw.get("workLocationOption"))
+        posted_value = raw.get("posted_at") or raw.get("postedTs")
+        if isinstance(posted_value, (int, float)):
+            posted_at = datetime.fromtimestamp(posted_value, tz=timezone.utc).isoformat()
+        else:
+            posted_at = _date_or_empty(posted_value)
+    elif ats == "jibe":
+        apply_url = _text(raw.get("apply_url") or raw.get("url"))
+        description = strip_html(raw.get("description") or raw.get("qualifications") or raw.get("responsibilities"))
+        employment_type = _text(raw.get("employment_type"))
+        workplace_type = _text(raw.get("location_type"))
+        posted_at = _date_or_empty(raw.get("posted_date") or raw.get("create_date"))
+    elif ats == "mcloud":
+        apply_url = _text(raw.get("url") or raw.get("seo_url") or raw.get("fndly_url"))
+        description = strip_html(raw.get("description"))
+        employment_type = _text(raw.get("employment_type") or raw.get("job_type"))
+        workplace_type = _text(raw.get("location_type"))
+        posted_at = _date_or_empty(raw.get("open_date") or raw.get("update_date"))
     else:
         apply_url = _text(raw.get("jobUrl") or raw.get("applyUrl") or raw.get("url"))
         description = strip_html(raw.get("descriptionHtml") or raw.get("description"))

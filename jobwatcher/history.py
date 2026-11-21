@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .config import SOURCE_BY_ID, Source
+from .config import OPTIONAL_BOARD_SOURCES, SOURCES, SOURCE_BY_ID, Source
 from .normalize import normalize_posting
 
 
@@ -37,8 +37,9 @@ def build_history(raw_root: str | Path) -> list[dict[str, Any]]:
 
     records: dict[str, dict[str, Any]] = {}
     first_successful_day: dict[str, str] = {}
+    runs = _runs(Path(raw_root))
 
-    for day, _statuses, raw_files in _runs(Path(raw_root)):
+    for day, _statuses, raw_files in runs:
         for source_id, path in raw_files.items():
             first_successful_day.setdefault(source_id, day)
             envelope = _read_json(path)
@@ -81,6 +82,20 @@ def build_history(raw_root: str | Path) -> list[dict[str, Any]]:
             for record in records.values():
                 if record["source"] == source_id and record["removed_date"] == "" and record["posting_key"] not in listed_keys:
                     record["removed_date"] = day
+
+    # When the watchlist changes, the prior employers should not remain open
+    # forever just because their last snapshot is still in the repository.
+    # Test fixtures and historical-only rebuilds without a current source are
+    # left untouched; a live run with at least one active source proves the
+    # old feed has been retired from the published watchlist.
+    if runs:
+        latest_day, latest_status, _ = runs[-1]
+        active_ids = {source.id for source in (*SOURCES, *OPTIONAL_BOARD_SOURCES)}
+        current_ids = {item.get("id") for item in latest_status.get("sources", []) if item.get("id") in active_ids}
+        if current_ids:
+            for record in records.values():
+                if record["source"] not in active_ids and not record["removed_date"]:
+                    record["removed_date"] = latest_day
 
     return sorted(records.values(), key=lambda row: (row["employer"].lower(), row["title"].lower(), row["source_id"]))
 

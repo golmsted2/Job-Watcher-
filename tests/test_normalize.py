@@ -1,4 +1,4 @@
-from jobwatcher.config import SOURCE_BY_ID, Source, is_in_role, is_us_location
+from jobwatcher.config import Source, is_in_role, is_us_location
 from jobwatcher.normalize import normalize_posting
 
 
@@ -13,10 +13,10 @@ def test_greenhouse_record_becomes_common_schema():
             "absolute_url": "https://example.test/jobs/123",
             "updated_at": "2026-11-20T12:00:00Z",
         },
-        SOURCE_BY_ID["stripe"],
+        Source("greenhouse-test", "Test Bank", "Greenhouse", "https://example.test/greenhouse"),
     )
 
-    assert row["posting_key"] == "stripe:123"
+    assert row["posting_key"] == "greenhouse-test:123"
     assert row["location"] == "New York, NY"
     assert row["team"] == "Finance"
     assert row["description"] == "Own the forecast."
@@ -46,6 +46,8 @@ def test_role_rule_is_explicit_and_case_insensitive():
     assert is_in_role("FP&A Analyst")
     assert not is_in_role("Senior Financial Analyst")
     assert is_in_role("Credit Risk Analyst")
+    assert is_in_role("Client Service Associate", "Supports investment portfolios and financial markets.")
+    assert is_in_role("Relationship Banker")
     assert not is_in_role("Business Intelligence Manager")
     assert not is_in_role("Data Analyst")
     assert not is_in_role("Senior Product Designer")
@@ -54,8 +56,10 @@ def test_role_rule_is_explicit_and_case_insensitive():
 def test_us_location_rule_rejects_ambiguous_remote_and_non_us_locations():
     assert is_us_location("New York, NY")
     assert is_us_location("Remote, United States")
+    assert is_us_location("Boston, Massachusetts")
     assert not is_us_location("Remote")
     assert not is_us_location("London, UK")
+    assert not is_us_location("Dublin, Co. Dublin, Ireland")
 
 
 def test_adzuna_adapter_uses_dynamic_employer_and_us_location():
@@ -74,6 +78,44 @@ def test_adzuna_adapter_uses_dynamic_employer_and_us_location():
 
     assert row["employer"] == "Example Bank"
     assert row["is_us"] is True
+    assert row["in_role"] is True
+
+
+def test_workday_record_maps_to_a_us_early_career_posting():
+    row = normalize_posting(
+        {
+            "title": "Credit Analyst - Early Career",
+            "externalPath": "/job/Richmond-VA/Credit-Analyst_R123",
+            "locationsText": "Richmond, VA",
+            "bulletFields": ["R123"],
+            "timeType": "Full time",
+            "_apply_url": "https://example.test/job/R123",
+        },
+        Source("workday-test", "Test Bank", "Workday", "https://example.test/jobs"),
+    )
+
+    assert row["posting_key"] == "workday-test:R123"
+    assert row["is_us"] is True
+    assert row["in_role"] is True
+    assert row["apply_url"].endswith("R123")
+
+
+def test_oracle_record_maps_finance_and_secondary_source_fields():
+    row = normalize_posting(
+        {
+            "Id": "456",
+            "Title": "2027 Summer Analyst - Finance",
+            "PrimaryLocation": "New York, NY, United States",
+            "JobFunction": "Finance",
+            "ShortDescriptionStr": "A campus role for new graduates.",
+            "PostedDate": "2026-11-20",
+            "_apply_url": "https://example.test/job/456",
+        },
+        Source("oracle-test", "Test Bank", "Oracle", "https://example.test/oracle", site="CX"),
+    )
+
+    assert row["posting_key"] == "oracle-test:456"
+    assert row["team"] == "Finance"
     assert row["in_role"] is True
 
 
