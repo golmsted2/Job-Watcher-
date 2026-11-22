@@ -1,15 +1,15 @@
 {
-  "run_utc": "2026-11-21T19:15:53.446836+00:00",
-  "latest_run_date": "2026-11-21",
+  "run_utc": "2026-11-22T14:10:19.292842+00:00",
+  "latest_run_date": "2026-11-22",
   "earliest_raw_date": "2026-11-21",
-  "successful_run_days": 1,
-  "open_postings": 943,
-  "open_us_postings": 3037,
-  "open_all_postings": 5267,
-  "new_today": 0,
-  "removed_today": 0,
-  "new_all_today": 0,
-  "removed_all_today": 0,
+  "successful_run_days": 2,
+  "open_postings": 953,
+  "open_us_postings": 3046,
+  "open_all_postings": 5265,
+  "new_today": 17,
+  "removed_today": 7,
+  "new_all_today": 86,
+  "removed_all_today": 88,
   "first_run_postings": 5267,
   "sources": [
     {
@@ -20,8 +20,8 @@
       "ok": true,
       "item_count": 200,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 1
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "stifel",
@@ -31,7 +31,7 @@
       "ok": true,
       "item_count": 161,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
       "salary_enriched": 0
     },
     {
@@ -42,7 +42,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
       "salary_enriched": 0
     },
     {
@@ -53,8 +53,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 1
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "citi",
@@ -64,8 +64,8 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 12
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "wells-fargo",
@@ -75,8 +75,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 38
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "goldman-sachs",
@@ -84,9 +84,9 @@
       "ats": "Oracle",
       "endpoint": "https://hdpc.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
       "ok": true,
-      "item_count": 190,
+      "item_count": 188,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
       "salary_enriched": 0
     },
     {
@@ -97,8 +97,8 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 13
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "pnc",
@@ -108,8 +108,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 48
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "us-bank",
@@ -119,8 +119,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 210
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "state-street",
@@ -130,8 +130,8 @@
       "ok": true,
       "item_count": 1000,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 44
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "bny",
@@ -141,7 +141,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
       "salary_enriched": 0
     },
     {
@@ -150,9 +150,9 @@
       "ats": "Oracle",
       "endpoint": "https://egug.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
       "ok": true,
-      "item_count": 392,
+      "item_count": 388,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
       "salary_enriched": 0
     },
     {
@@ -161,10 +161,10 @@
       "ats": "Workday",
       "endpoint": "https://capitalone.wd12.myworkdayjobs.com/wday/cxs/capitalone/Capital_One/jobs",
       "ok": true,
-      "item_count": 330,
+      "item_count": 328,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 4
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     },
     {
       "id": "northern-trust",
@@ -174,8 +174,8 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-21T14:18:18.122155+00:00",
-      "salary_enriched": 23
+      "fetched_at_utc": "2026-11-22T14:08:40.435372+00:00",
+      "salary_enriched": 0
     }
   ]
 }

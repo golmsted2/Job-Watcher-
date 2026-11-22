@@ -1,8 +1,180 @@
-# Job changes for 2026-11-21
+# Job changes for 2026-11-22
 
 ## New postings
 
-None.
+- [Dir- LAC Field Capabilities and Enablement](https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26014609) — American Express · CDMX, Mexico
+- [Relationship Banker - Savannah-Augusta Market - Brunswick Area](https://ghr.wd1.myworkdayjobs.com/en-US/Lateral-US/job/Brunswick/Relationship-Banker---Savannah-Augusta-Market---Brunswick-Area_26043020-1) — Bank of America · 2 Locations
+- [Vice President, Full-Stack Engineer](https://eofe.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/BNY-Careers/job/81946) — BNY · Jersey City, NJ, United States
+- [Financial Planning & Analysis - Lending Analyst, Assistant Vice President](https://citi.eightfold.ai/careers/job/859036799763) — Citi · SINGAPORE, Singapore
+- [IT Business Sr Analyst - Assistant Vice President](https://citi.eightfold.ai/careers/job/859038503249) — Citi · IRVING, Texas, United States of America
+- [HR Program Management Senior Analyst](https://citi.eightfold.ai/careers/job/859038736130) — Citi · BUDAPEST, Hungary
+- [Java Applications Development - Vice President](https://citi.eightfold.ai/careers/job/859038770212) — Citi · CHENNAI, Tamil Nādu, India
+- [U.S. Consumer Cards Summer Analyst, Jacksonville, FL - USA 2027](https://citi.eightfold.ai/careers/job/859038771976) — Citi · JACKSONVILLE, Florida, United States of America
+- [U.S. Consumer Cards Summer Analyst, Wilmington, DE - USA 2026](https://citi.eightfold.ai/careers/job/859038772172) — Citi · WILMINGTON, Delaware, United States of America
+- [Applications Development Technology Lead Analyst-Vice President](https://citi.eightfold.ai/careers/job/859038772297) — Citi · PUNE, Mahārāshtra, India
+- [Business Analytics Analyst, SQL, Python and SAS](https://citi.eightfold.ai/careers/job/859038791088) — Citi · GURUGRAM, Haryāna, India
+- [Data and Reporting Analyst](https://citi.eightfold.ai/careers/job/859038791439) — Citi · GURUGRAM, Haryāna, India
+- [Specialized Analytics Analyst](https://citi.eightfold.ai/careers/job/859038791574) — Citi · GURUGRAM, Haryāna, India
+- [Business Analytics Analyst](https://citi.eightfold.ai/careers/job/859038791699) — Citi · GURUGRAM, Haryāna, India
+- [Credit Officer, Assistant Vice President, Taipei, Taiwan](https://citi.eightfold.ai/careers/job/859038835349) — Citi · TAIPEI, Taipei City, Taiwan
+- [U.S. Consumer Cards Summer Leadership Associate, Jacksonville, FL - USA 2027](https://citi.eightfold.ai/careers/job/859038841935) — Citi · JACKSONVILLE, Florida, United States of America
+- [Managing Director, Head of UK, Europe & Middle East & Africa (MEA) Financial Sponsor Coverage, Citi Commercial Bank (CCB)](https://citi.eightfold.ai/careers/job/859038858904) — Citi · LONDON, United Kingdom
+- [Technical Solutions Architect with Java](https://citi.eightfold.ai/careers/job/859038912817) — Citi · LONDON, United Kingdom
+- [Senior Architectural and Engineering Lead, Senior Vice President](https://citi.eightfold.ai/careers/job/859038949475) — Citi · TAMPA, Florida, United States of America
+- [Reference Data Management Representative](https://citi.eightfold.ai/careers/job/859039016095) — Citi · PUNE, Mahārāshtra, India
+- [Banamex Analista de procesos e infraestructura - Banca Comercial](https://citi.eightfold.ai/careers/job/859039033575) — Citi · ZAPOPAN, Jalisco, Mexico
+- [Billing Statement Campaign Delivery Lead](https://citi.eightfold.ai/careers/job/859039037312) — Citi · OFALLON, Missouri, United States of America, FLORENCE, Kentucky, United States of America, JACKSONVILLE, Florida, United States of America, SCHAUMBURG, Illinois, United States of America, SIOUX FALLS, South Dakota, United States of America
+- [VP Senior Java Software Engineer - Prime Brokerage Technology](https://citi.eightfold.ai/careers/job/859039049101) — Citi · TAMPA, Florida, United States of America
+- [Senior Vice President, Mid-Corp Relationship Manager, Citi Commercial Bank](https://citi.eightfold.ai/careers/job/859039074117) — Citi · TAIPEI, Taipei City, Taiwan
+- [Cash & Collateral Management Intermediate Analyst - C11 - HEREDIA](https://citi.eightfold.ai/careers/job/859039085770) — Citi · HEREDIA, Costa Rica
+- [Client - Research, Summer Associate, Mumbai - India, 2027](https://citi.eightfold.ai/careers/job/859039101058) — Citi · MUMBAI, Mahārāshtra, India
+- [Product Developer, SVP, New York (Hybrid)](https://citi.eightfold.ai/careers/job/859039105877) — Citi · NEW YORK, New York, United States of America
+- [FX eTrading Tech PMO - VP - London](https://citi.eightfold.ai/careers/job/859039106815) — Citi · LONDON, United Kingdom
+- [Small Business Sales Coach, Central Southeast, Vice President](https://citi.eightfold.ai/careers/job/859039107711) — Citi · CHICAGO, Illinois, United States of America, MIAMI, Florida, United States of America, WASHINGTON, District of Columbia, United States of America
+- [Part Time Universal Banker (20 Hours), Fontana Branch](https://citi.eightfold.ai/careers/job/859039107718) — Citi · FONTANA, California, United States of America
+- [Part-Time Teller (20 Hours), Chatsworth Branch](https://citi.eightfold.ai/careers/job/859039107741) — Citi · CHATSWORTH, California, United States of America
+- [Universal Banker (40 Hours), San Rafael Branch](https://citi.eightfold.ai/careers/job/859039107755) — Citi · SAN RAFAEL, California, United States of America
+- [Banamex  Ejecutivo de  Cuenta Pyme - Agua Prieta, Sonora](https://citi.eightfold.ai/careers/job/859039128096) — Citi · AGUA PRIETA, Sonora, Mexico
+- [US EG Financial Advisor Region 052](https://careers.edwardjones.com/job/19066333/us-eg-financial-advisor-region-052-ashland-va/) — Edward Jones · Ashland, VA, US
+- [US Experienced Advisor Region 059](https://careers.edwardjones.com/job/19725558/us-experienced-advisor-region-059-us-nationwide/) — Edward Jones · Ashland, VA, US
+- [US Experienced Advisor Region 145](https://careers.edwardjones.com/job/19725560/us-experienced-advisor-region-145-us-nationwide/) — Edward Jones · Ashland, VA, US
+- [Relationship Banker - Babylon,  NY](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210796324) — JPMorgan Chase · Babylon, NY, United States
+- [Branch Operations Lead - Bayport, NY](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210806582) — JPMorgan Chase · Bayport, NY, United States
+- [Market Risk FRTB – Implementation & Analytics – Executive Director](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210807000) — JPMorgan Chase · New York, NY, United States
+- [Private Client Banker - Yellowstone Blvd - Forest Hills, NY](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210807940) — JPMorgan Chase · Forest Hills, NY, United States
+- [Finance & Business Management - Associate](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210809037) — JPMorgan Chase · Newark, DE, United States
+- [Product Controller - Associate](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210810852) — JPMorgan Chase · Brooklyn, NY, United States
+- [Branch Manager - Long Island Central, NY](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210811400) — JPMorgan Chase · East Meadow, NY, United States
+- [Java Lead_Vice President _Software Engineer](https://morganstanley.eightfold.ai/careers/job/549800183728) — Morgan Stanley · Bengaluru, Karnataka, India
+- [Business Analyst – HR Data Governance (Hybrid) / Analyste d’affaires – Gouvernance des données RH (hybride)](https://morganstanley.eightfold.ai/careers/job/549800509098) — Morgan Stanley · Montreal, Quebec, Canada
+- [Internal Reporting Expert](https://morganstanley.eightfold.ai/careers/job/549800673993) — Morgan Stanley · Budapest, Budapest, Hungary
+- [Vice President, Capital & Stress Testing Lead](https://morganstanley.eightfold.ai/careers/job/549801221896) — Morgan Stanley · Budapest, Budapest, Hungary
+- [AWM Operations Margin Associate](https://morganstanley.eightfold.ai/careers/job/549801280301) — Morgan Stanley · Hong Kong, Hong Kong
+- [HR Shared Services Employee Support (Night Shift)_Director_HR Business Partners](https://morganstanley.eightfold.ai/careers/job/549801284687) — Morgan Stanley · Bengaluru, Karnataka, India
+- [Full Stack Software Engineer](https://morganstanley.eightfold.ai/careers/job/549801315708) — Morgan Stanley · London, United Kingdom
+- [Registered Client Service Associate](https://morganstanley.eightfold.ai/careers/job/549801373961) — Morgan Stanley · Sacramento, California, United States of America
+- [Client Service Associate - Part Time](https://morganstanley.eightfold.ai/careers/job/549801389595) — Morgan Stanley · Roseville, California, United States of America
+- [Director of Investments](https://morganstanley.eightfold.ai/careers/job/549801391876) — Morgan Stanley · Pasadena, California, United States of America
+- [Associate - EMEA Syndicate Operations](https://morganstanley.eightfold.ai/careers/job/549801404278) — Morgan Stanley · London, United Kingdom
+- [Senior Investment Associate](https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Tampa-FL/Senior-Investment-Associate_R162388-1) — Northern Trust · Tampa, FL
+- [Senior Consultant, Compliance](https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Limerick-Ireland/Senior-Consultant--Compliance_R162589) — Northern Trust · Limerick, Ireland
+- [Associate, SW Eng](https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Bangalore-India/Associate--SW-Eng_R162795) — Northern Trust · 2 Locations
+- [International Product, Wealth Custody & Clearing, Vice President](https://statestreet.wd1.myworkdayjobs.com/Global/job/London-England/International-Product--Wealth-Custody---Clearing--Vice-President_R-782276/apply) — State Street · London, London, United Kingdom
+- [PAM Engineering Manager - Vice President](https://statestreet.wd1.myworkdayjobs.com/Global/job/Hyderabad-India/PAM-Engineering-Manager---Vice-President_R-793874-1/apply) — State Street · Hyderabad, Telangāna, India
+- [Senior Threat Modeler, VP](https://statestreet.wd1.myworkdayjobs.com/Global/job/Bangalore-India/Senior-Threat-Modeler--VP_R-793938/apply) — State Street · Bangalore, Karnātaka, India
+- [Offensive AI Engineer – Frontier AI Security & Testing, VP](https://statestreet.wd1.myworkdayjobs.com/Global/job/North-Quincy-Massachusetts/Senior-Platform-Engineer_R-794022/apply) — State Street · North Quincy, Massachusetts, United States of America
+- [Senior Business Analyst, AVP II - State Street Investment Management](https://statestreet.wd1.myworkdayjobs.com/Global/job/Quincy-Massachusetts/Senior-Business-Analyst--AVP-II---State-Street-Investment-Management_R-794219/apply) — State Street · Quincy, Massachusetts, United States of America
+- [Software Engineering & Development-Workstream Lead](https://statestreet.wd1.myworkdayjobs.com/Global/job/Princeton-New-Jersey/Software-Engineering---Development-Workstream-Lead_R-794391/apply) — State Street · Princeton, New Jersey, United States of America
+- [Corporate Banking Operations Manager, Officer](https://statestreet.wd1.myworkdayjobs.com/Global/job/HINJEWADI-PUNE/Corporate-Banking-Operations--Officer_R-794509/apply) — State Street · Pune, Mahārāshtra, India
+- [Chief Technology Officer, MD](https://statestreet.wd1.myworkdayjobs.com/Global/job/Boston-Massachusetts/Chief-Technology-Officer--MD_R-794518/apply) — State Street · Boston, Massachusetts, United States of America
+- [Agentic AI Builder, Officer - State Street Investment Management](https://statestreet.wd1.myworkdayjobs.com/Global/job/Boston-Massachusetts/Agentic-AI-Builder--Officer---State-Street-Investment-Management_R-794563/apply) — State Street · Boston, Massachusetts, United States of America
+- [Relationship Banker I - 171st & Center Bakers Omaha (Spanish Speaking Preferred)](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Omaha-NE/Relationship-Banker-I---171st---Center-Bakers-Omaha--Spanish-Speaking-Preferred-_2026-0034342/apply) — U.S. Bank · Omaha, NE, United States
+- [Operations Manager - Mortgage Servicing - Call Monitoring & Loss mitigation](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Chennai-India/Operations-Manager---Mortgage-Servicing---Call-Monitoring---Loss-mitigation_2026-0034757/apply) — U.S. Bank · Chennai, Tamil Nādu, India
+- [Operations Manager - Third Party Vendor Testing](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Chennai-India/Operations-Manager---Third-Party-Vendor-Testing_2026-0034759/apply) — U.S. Bank · Chennai, Tamil Nādu, India
+- [Default Management Foreclosure Associate](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Chennai-India/Default-Management-Foreclosure-Associate_2026-0034826/apply) — U.S. Bank · Chennai, Tamil Nādu, India
+- [Analytics Lead - Channel Performance](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Minneapolis-MN/Analytics-Lead---Channel-Performance_2026-0036220/apply) — U.S. Bank · Minneapolis, MN, United States
+- [Personal Banker Broadway & Dey DeNovo](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/NEW-YORK-NY/Personal-Banker-Broadway---Dey-DeNovo_R-574996) — Wells Fargo · NEW YORK, NY
+- [Corporate Banking Analyst - Fund Finance Portfolio Management](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/CHARLOTTE-NC/Corporate-Banking-Analyst---Fund-Finance-Portfolio-Management_R-585144) — Wells Fargo · CHARLOTTE, NC
+- [Branch Operations Coordinator Cottage Hill](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/MOBILE-AL/Branch-Operations-Coordinator-Cottage-Hill_R-585815-1) — Wells Fargo · MOBILE, AL
+- [Senior Premier Banker Gulf Point](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/FORT-MYERS-FL/Senior-Premier-Banker-Gulf-Point_R-585842) — Wells Fargo · FORT MYERS, FL
+- [Relationship Banker Summit District CO](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/WHEAT-RIDGE-CO/Relationship-Banker-Summit-District-CO_R-586850) — Wells Fargo · WHEAT RIDGE, CO
+- [Branch Manager Piedmont South District](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/HIGH-POINT-NC/Branch-Manager-Piedmont-South-District_R-587142) — Wells Fargo · 6 Locations
+- [Senior Marketing Consultant - Performance Media](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/CHARLOTTE-NC/Senior-Marketing-Consultant---Performance-Media_R-587171) — Wells Fargo · CHARLOTTE, NC
+- [Teller Mission Bend and MB](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/HOUSTON-TX/Teller-Part-Time-Mission-Bend-and-MB_R-587651-1) — Wells Fargo · HOUSTON, TX
+- [Teller Part Time Tequesta](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/TEQUESTA-FL/Teller-Part-Time-Tequesta_R-588366-1) — Wells Fargo · TEQUESTA, FL
+- [Teller Part Time Myakka](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/PORT-CHARLOTTE-FL/Teller-Part-Time-Myakka_R-588402) — Wells Fargo · PORT CHARLOTTE, FL
+- [Teller Draper](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/DRAPER-UT/Teller-Draper_R-588457) — Wells Fargo · DRAPER, UT
+- [Teller Part Time Draper](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/DRAPER-UT/Teller-Part-Time-Draper_R-588459-1) — Wells Fargo · DRAPER, UT
+- [Personal Banker Bilingual Spanish San Luis Obispo](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/SAN-LUIS-OBISPO-CA/Personal-Banker-Bilingual-Spanish-San-Luis-Obispo_R-588535) — Wells Fargo · SAN LUIS OBISPO, CA
+- [Branch Manager Southeast Charlotte](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/CHARLOTTE-NC/Branch-Manager-Southeast-Charlotte_R-589018) — Wells Fargo · 3 Locations
+- [Personal Banker Bilingual Santa Cruz River District](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/TUCSON-AZ/Personal-Banker-Bilingual-Santa-Cruz-River-District_R-589020) — Wells Fargo · TUCSON, AZ
 ## Removed postings
 
-None.
+- [Senior Lead Analyst](https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26015183) — American Express · Gurugram, HR, India
+- [Apprentice](https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26015958) — American Express · Gurugram, HR, India
+- [Associate - Cryptographic Payment Key Management](https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26016025) — American Express · Phoenix, AZ, United States
+- [Analyst-Compliance](https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26016434) — American Express · Gurugram, HR, India
+- [Apprentice](https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26016451) — American Express · Gurugram, HR, India
+- [Relationship Banker - West Manhattan NY Area - Bilingual Spanish Required](https://ghr.wd1.myworkdayjobs.com/en-US/Lateral-US/job/New-York/Relationship-Banker---West-Manhattan-NY-Area---Bilingual-Spanish-Required_26032274) — Bank of America · 6 Locations
+- [Senior Vice President, Client Executive (Korea Asset Servicing)](https://eofe.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/BNY-Careers/job/83290) — BNY · Seoul, Korea, Republic of
+- [Area Sales Manager - Jackson, Mississippi](https://capitalone.wd12.myworkdayjobs.com/en-US/Capital_One/job/Jackson-MS/Area-Sales-Manager---Jackson--Mississippi_R1005167-1) — Capital One · Jackson, MS
+- [Area Sales Manager - Baton Rouge, Louisiana](https://capitalone.wd12.myworkdayjobs.com/en-US/Capital_One/job/Baton-Rouge-LA/Area-Sales-Manager---Baton-Rouge--Louisiana_R1005225-1) — Capital One · Baton Rouge, LA
+- [Assistant Vice President, Client Service, Securities Services Operations](https://citi.eightfold.ai/careers/job/859035353510) — Citi · TOKYO, Tokyo, Japan
+- [Personal Banker SAFE Act - Virginia/Capitol area](https://citi.eightfold.ai/careers/job/859035785111) — Citi · CENTREVILLE, Virginia, United States of America
+- [Part Time Universal Banker  (20 Hours) - Maryland/Capitol area](https://citi.eightfold.ai/careers/job/859036515026) — Citi · GAITHERSBURG, Maryland, United States of America, WASHINGTON, District of Columbia, United States of America
+- [Client Experience Associate SAFE Act - AVP - San Francisco, CA](https://citi.eightfold.ai/careers/job/859036586446) — Citi · SAN FRANCISCO, California, United States of America, PALO ALTO, California, United States of America
+- [Banamex Banquero de apoyo Patrimonial Lindavista Zona Norte CDMX.](https://citi.eightfold.ai/careers/job/859038381256) — Citi · CIUDAD DE MEXICO, Distrito Federal, Mexico
+- [BANAMEX IT Project Senior Analyst - C12 - Ciudad De Mexico](https://citi.eightfold.ai/careers/job/859038507705) — Citi · CIUDAD DE MEXICO, Mexico
+- [Java React Fullstack Developer](https://citi.eightfold.ai/careers/job/859038807376) — Citi · CHENNAI, Tamil Nādu, India
+- [Java Developer - Credit Risk Technology - Officer](https://citi.eightfold.ai/careers/job/859038862298) — Citi · IRVING, Texas, United States of America
+- [General Svcs Operations Mgr - C12 - KOWLOON](https://citi.eightfold.ai/careers/job/859038920565) — Citi · KOWLOON, Hong Kong
+- [Senior Java Developer- Assistant Vice President](https://citi.eightfold.ai/careers/job/859038920784) — Citi · PUNE, Mahārāshtra, India
+- [Banamex Banquero Integral Distrito   Gdl.  Suc  373 - AMECA,JAL.](https://citi.eightfold.ai/careers/job/859038938601) — Citi · AMECA, Jalisco, Mexico
+- [IT Business Lead Analyst - Vice President](https://citi.eightfold.ai/careers/job/859038956316) — Citi · CHENNAI, Tamil Nādu, India
+- [Senior Java Lead](https://citi.eightfold.ai/careers/job/859039034367) — Citi · NEW YORK, New York, United States of America
+- [FX STIRT / Curve Building Java Developer - Assistant Vice President](https://citi.eightfold.ai/careers/job/859039034844) — Citi · London, United Kingdom
+- [Billing Statement Campaign Delivery Specialist](https://citi.eightfold.ai/careers/job/859039037302) — Citi · OFALLON, Missouri, United States of America, FLORENCE, Kentucky, United States of America, JACKSONVILLE, Florida, United States of America, SCHAUMBURG, Illinois, United States of America, SIOUX FALLS, South Dakota, United States of America
+- [Senior Software Engineer – Ultra Low Latency Risk Engine Developer (VP)](https://citi.eightfold.ai/careers/job/859039050664) — Citi · LONDON, United Kingdom
+- [SEM Analyst, Paid Search Activation](https://citi.eightfold.ai/careers/job/859039061189) — Citi · NEW YORK, New York, United States of America
+- [Senior Mortgage Lending Officer (SAFE Act) - Manhattan](https://citi.eightfold.ai/careers/job/859039061813) — Citi · NEW YORK, New York, United States of America
+- [SVP-Solution Sales -Services-Treasury & Trade Solutions](https://citi.eightfold.ai/careers/job/859039069553) — Citi · GURUGRAM, Haryāna, India
+- [Officer, Operations Readiness Analyst](https://citi.eightfold.ai/careers/job/859039077290) — Citi · MUMBAI, Mahārāshtra, India
+- [Senior Vice President, Marketing Operations Planning, Governance & Operational Intelligence](https://citi.eightfold.ai/careers/job/859039083809) — Citi · WILMINGTON, Delaware, United States of America, IRVING, Texas, United States of America, JACKSONVILLE, Florida, United States of America, NEW YORK, New York, United States of America
+- [Lead IT Business Analyst](https://citi.eightfold.ai/careers/job/859039087696) — Citi · JACKSONVILLE, Florida, United States of America, IRVING, Texas, United States of America
+- [Senior Business Analyst Group Manager](https://citi.eightfold.ai/careers/job/859039093801) — Citi · IRVING, Texas, United States of America, JACKSONVILLE, Florida, United States of America
+- [Audit Manager, Vice President](https://citi.eightfold.ai/careers/job/859039101444) — Citi · MUMBAI, Mahārāshtra, India
+- [Banamex Norte Ejecutivo de Cuenta Pyme Distrito Monterrey Regional](https://citi.eightfold.ai/careers/job/859039105813) — Citi · MONTERREY, Nuevo León, Mexico
+- [Personal Banker SAFE Act - Thornwood Branch](https://citi.eightfold.ai/careers/job/859039107422) — Citi · THORNWOOD, New York, United States of America
+- [Part-Time Universal Banker (20 Hours), Colton Branch](https://citi.eightfold.ai/careers/job/859039107725) — Citi · COLTON, California, United States of America
+- [Head Universal Banker - Bethesda Branch](https://citi.eightfold.ai/careers/job/859039107742) — Citi · BETHESDA, Maryland, United States of America
+- [Part-Time Universal Banker (20 Hours) - Westport Plaza Branch](https://citi.eightfold.ai/careers/job/859039110897) — Citi · WESTPORT, Connecticut, United States of America
+- [Banamex  Cajero - Caborca y Magdalena](https://citi.eightfold.ai/careers/job/859039113666) — Citi · CABORCA, Sonora, Mexico, MAGDALENA, Sonora, Mexico
+- [Registered Branch Associate](https://careers.edwardjones.com/job/23796897/registered-branch-associate-new-kensington-pa/) — Edward Jones · New Kensington, PA, US
+- [Associate Financial Advisor](https://careers.edwardjones.com/job/23898655/associate-financial-advisor-rochelle-il/) — Edward Jones · Rochelle, IL, US
+- [Associate Financial Advisor](https://careers.edwardjones.com/job/23898677/associate-financial-advisor-rochelle-il/) — Edward Jones · Rochelle, IL, US
+- [2027 | Japan | Tokyo | Internal Audit | Summer Analyst](https://hdpc.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_3001/job/182621) — Goldman Sachs · Tokyo, Japan
+- [2027 | Japan | Tokyo | Asset Management, Private Investing | Summer Analyst](https://hdpc.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_3001/job/182622) — Goldman Sachs · Tokyo, Japan
+- [2027 Commercial & Investment Bank - Global Corporate Banking Program - Summer Analyst - Tokyo (BCF Onsite)](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210766930) — JPMorgan Chase · Tokyo-To, Japan
+- [2027 Commercial & Investment Bank - Markets Program - Research - Summer Analyst - Tokyo (BCF Onsite)](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210766941) — JPMorgan Chase · Tokyo-To, Japan
+- [2027 Commercial & Investment Bank - Markets Program - Sales - Summer Analyst - Tokyo (BCF Onsite)](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210766948) — JPMorgan Chase · Tokyo-To, Japan
+- [2027 Commercial & Investment Bank - Markets Program - Trading - Summer Analyst - Tokyo (BCF Onsite)](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210766959) — JPMorgan Chase · Tokyo-To, Japan
+- [2027 Commercial & Investment Bank - Global Investment Banking Program - Summer Analyst - Tokyo (BCF Onsite)](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210766972) — JPMorgan Chase · Tokyo-To, Japan
+- [Business Analysis Associate - Access Management Group](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210806314) — JPMorgan Chase · Westerville, OH, United States
+- [CORP_Generic_Global_JPM](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210811449) — JPMorgan Chase · San Diego, CA, United States
+- [Senior Java/Scala Developer](https://morganstanley.eightfold.ai/careers/job/549799532805) — Morgan Stanley · Glasgow, United Kingdom
+- [Organisational Dashboard Specialist](https://morganstanley.eightfold.ai/careers/job/549800142219) — Morgan Stanley · Budapest, Budapest, Hungary
+- [Registered Client Service Associate](https://morganstanley.eightfold.ai/careers/job/549800246034) — Morgan Stanley · Mount Laurel, New Jersey, United States of America
+- [Ground Transport, Vice President, Travel & Expense Management](https://morganstanley.eightfold.ai/careers/job/549801160747) — Morgan Stanley · Mumbai, Maharashtra, India
+- [Business Development Manager](https://morganstanley.eightfold.ai/careers/job/549801187328) — Morgan Stanley · Cleveland, Ohio, United States of America, Birmingham, Michigan, United States of America, Bloomfield Hills, Michigan, United States of America, Allentown, Pennsylvania, United States of America, Ann Arbor, Michigan, United States of America, Farmington Hills, Michigan, United States of America, Grand Rapids, Michigan, United States of America, Pittsburgh, Pennsylvania, United States of America, Troy, Michigan, United States of America
+- [Lead Azure Data Engineer](https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Pune-India/Azure-Data-Engineer_R158442) — Northern Trust · 2 Locations
+- [Assc Specialist](https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Bangalore-India/Assc-Specialist_R162320-1) — Northern Trust · Bangalore, India
+- [Technology Early Career Talent Program Manager](https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Pune-India/ECT-Program-Manager---Early-Career-Talent_R163741-1) — Northern Trust · Pune, India
+- [Global Markets & Credit Finance Business Unit Controller, Managing Director](https://statestreet.wd1.myworkdayjobs.com/Global/job/Boston-Massachusetts/Global-Markets---Credit-Finance-Business-Unit-Controller--Managing-Director_R-799685/apply) — State Street · Boston, Massachusetts, United States of America
+- [Real Assets Fund Accounting & Administration, VP](https://statestreet.wd1.myworkdayjobs.com/Global/job/Singapore-Singapore/Real-Assets-Fund-Accounting---Administration--VP_R-799865/apply) — State Street · Singapore, Central Singapore, Singapore
+- [Product Development, AVP](https://statestreet.wd1.myworkdayjobs.com/Global/job/Bangalore-India/Product-Development--AVP_R-800053/apply) — State Street · Bangalore, Karnātaka, India
+- [Salesforce Data Analyst / Data Governance Analyst, Team Lead](https://statestreet.wd1.myworkdayjobs.com/Global/job/Mumbai-India/Salesforce-Data-Analyst---Data-Governance-Analyst--Team-Lead_R-800079/apply) — State Street · Mumbai, Mahārāshtra, India
+- [Software Engineering & Development, Assistant Manager](https://statestreet.wd1.myworkdayjobs.com/Global/job/Hyderabad-India/Software-Engineering---Development--Assistant-Manager_R-800086-1/apply) — State Street · Hyderabad, Telangāna, India
+- [Bank Loans, Associate 2](https://statestreet.wd1.myworkdayjobs.com/Global/job/Mumbai-India/Bank-Loans--Associate-2_R-800819-1/apply) — State Street · Mumbai, Mahārāshtra, India
+- [Bank Loans, Associate 2](https://statestreet.wd1.myworkdayjobs.com/Global/job/Coimbatore-India/Bank-Loans--Associate-2_R-800823-1/apply) — State Street · Coimbatore, Tamil Nādu, India
+- [Custody Management Services - Vice President (8 Mth Fixed Term Contract)](https://statestreet.wd1.myworkdayjobs.com/Global/job/Kilkenny-Ireland/Custody-Management-Services---Vice-President--8-Mth-Fixed-Term-Contract-_R-800969-1/apply) — State Street · Kilkenny, Kilkenny, Ireland
+- [Investment Compliance Analyst, Associate 2](https://statestreet.wd1.myworkdayjobs.com/Global/job/Bangalore-India/Investment-Compliance-Analyst--Associate-2_R-801271-1/apply) — State Street · Bangalore, Karnātaka, India
+- [Associate Software Engineer (Back-end Distributed systems)](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Atlanta-GA/Associate-Software-Engineer--Back-end-Distributed-systems-_2026-0034153/apply) — U.S. Bank · Atlanta, GA, United States
+- [Operations Manager 1](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Chennai-India/Operations-Manager-1_2026-0034771-1/apply) — U.S. Bank · Chennai, Tamil Nādu, India
+- [Operations Change Manager](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Knoxville-TN/Operations-Change-Manager_2026-0035242/apply) — U.S. Bank · Knoxville, TN, United States
+- [Project Manager](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Minneapolis-MN/Project-Manager_2026-0035735/apply) — U.S. Bank · Minneapolis, MN, United States
+- [Community CRA Mortgage Loan Originator](https://usbank.wd1.myworkdayjobs.com/US_Bank_Careers/job/Greenfield-WI/Community-CRA-Mortgage-Loan-Originator_2026-0035934-1/apply) — U.S. Bank · Greenfield, WI, United States
+- [Trade and Transaction Reporting Specialist](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/Bengaluru-India/Trade-and-Transaction-Reporting-Specialist_R-558880-1) — Wells Fargo · Bengaluru, India
+- [Technology Director - Cybersecurity Engineering](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/ISELIN-NJ/Technology-Director---Cybersecurity-Engineering_R-568222-1) — Wells Fargo · 4 Locations
+- [Senior Premier Banker Santa Ana, CA](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/SANTA-ANA-CA/Senior-Premier-Banker-Santa-Ana--CA_R-578368) — Wells Fargo · SANTA ANA, CA
+- [Teller Cross Creek](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/FORT-MILL-SC/Teller-Cross-Creek_R-582422) — Wells Fargo · FORT MILL, SC
+- [Senior Premier Banker Niles IL](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/NILES-IL/Senior-Premier-Banker-Niles-IL_R-584199) — Wells Fargo · NILES, IL
+- [Associate Customer Service Representative Everyday Banking](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/CHARLOTTE-NC/Associate-Customer-Service-Representative-Everyday-Banking_R-584446) — Wells Fargo · CHARLOTTE, NC
+- [Senior Premier Banker Lower Manhattan](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/NEW-YORK-NY/Senior-Premier-Banker-Lower-Manhattan_R-584645-1) — Wells Fargo · 2 Locations
+- [Teller Part Time Kennesaw Cobb Parkway](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/KENNESAW-GA/Teller-Part-Time-Kennesaw-Cobb-Parkway_R-585581) — Wells Fargo · KENNESAW, GA
+- [Client Associate](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/LINWOOD-NJ/Client-Associate_R-586248) — Wells Fargo · LINWOOD, NJ
+- [Senior Premier Banker - Franklin/Brentwood, TN](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/FRANKLIN-TN/Senior-Premier-Banker---Franklin-Brentwood--TN_R-586921) — Wells Fargo · FRANKLIN, TN
+- [Branch Manager - Prince William North, VA](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/MANASSAS-VA/Branch-Manager---Prince-William-North--VA_R-587463) — Wells Fargo · 8 Locations
+- [Teller Laguna Gateway](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/ELK-GROVE-CA/Teller-Laguna-Gateway_R-587886) — Wells Fargo · ELK GROVE, CA
+- [Senior Lead Artificial Intelligence Solutions Consultant](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/CONCORD-CA/Senior-Lead-Artificial-Intelligence-Solutions-Consultant_R-588329) — Wells Fargo · 3 Locations
+- [Lead Artificial Intelligence Solutions Consultant](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/CONCORD-CA/Lead-Artificial-Intelligence-Solutions-Consultant_R-588333) — Wells Fargo · 3 Locations
+- [Executive Director Liquidity Management Technology](https://wd1.myworkdaysite.com/recruiting/wf/WellsFargoJobs/job/ISELIN-NJ/Executive-Director-Liquidity-Management-Technology_R-588622) — Wells Fargo · 2 Locations
