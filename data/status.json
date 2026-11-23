@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-22T14:10:19.292842+00:00",
+  "run_time": "2026-11-23T19:10:25.746914+00:00",
   "first_run_date": "2026-11-21",
-  "days_with_success": 2,
-  "open": 5265,
-  "new_today": 86,
-  "removed_today": 88,
+  "days_with_success": 3,
+  "open": 5269,
+  "new_today": 643,
+  "removed_today": 646,
   "sources": [
     {
       "name": "Edward Jones",
@@ -14,7 +14,7 @@
     {
       "name": "Stifel",
       "ok": true,
-      "count": 161
+      "count": 166
     },
     {
       "name": "JPMorgan Chase",
@@ -39,7 +39,7 @@
     {
       "name": "Goldman Sachs",
       "ok": true,
-      "count": 188
+      "count": 186
     },
     {
       "name": "Morgan Stanley",
@@ -69,12 +69,12 @@
     {
       "name": "American Express",
       "ok": true,
-      "count": 388
+      "count": 400
     },
     {
       "name": "Capital One",
       "ok": true,
-      "count": 328
+      "count": 326
     },
     {
       "name": "Northern Trust",
