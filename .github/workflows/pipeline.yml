@@ -34,13 +34,27 @@ jobs:
           ALERT_FROM_EMAIL: ${{ secrets.ALERT_FROM_EMAIL }}
         run: python -m jobwatcher.alerts
       - name: Close previous issues and open today's issue
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           for issue in $(gh issue list --state open --json number --jq '.[].number'); do
             gh issue close "$issue" --reason completed || true
           done
-          gh issue create --title "$(date -u +%F)" --body-file data/processed/issue.md
+          issue_body_file="$(mktemp)"
+          trap 'rm -f "$issue_body_file"' EXIT
+          ISSUE_BODY_FILE="$issue_body_file" python - <<'PY'
+          import os
+          from pathlib import Path
+
+          source = Path("data/processed/issue.md").read_text(encoding="utf-8")
+          limit = 60000
+          if len(source) > limit:
+              source = source[:limit].rsplit("\n", 1)[0]
+              source += "\n\n> The issue body was truncated to stay within GitHub's size limit. The full report is in the repository artifacts.\n"
+          Path(os.environ["ISSUE_BODY_FILE"]).write_text(source, encoding="utf-8")
+          PY
+          gh issue create --title "$(date -u +%F)" --body-file "$issue_body_file"
       - name: Commit daily artifacts
         run: |
           git config user.name "github-actions[bot]"
