@@ -1,15 +1,15 @@
 {
-  "run_utc": "2026-11-25T16:54:21.031034+00:00",
-  "latest_run_date": "2026-11-25",
+  "run_utc": "2026-11-26T16:35:07.355924+00:00",
+  "latest_run_date": "2026-11-26",
   "earliest_raw_date": "2026-11-21",
-  "successful_run_days": 5,
-  "open_postings": 990,
-  "open_us_postings": 2924,
-  "open_all_postings": 5267,
-  "new_today": 217,
-  "removed_today": 273,
-  "new_all_today": 909,
-  "removed_all_today": 979,
+  "successful_run_days": 6,
+  "open_postings": 1021,
+  "open_us_postings": 2929,
+  "open_all_postings": 5268,
+  "new_today": 191,
+  "removed_today": 164,
+  "new_all_today": 633,
+  "removed_all_today": 700,
   "first_run_postings": 5267,
   "sources": [
     {
@@ -20,7 +20,7 @@
       "ok": true,
       "item_count": 200,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -29,9 +29,9 @@
       "ats": "Jibe",
       "endpoint": "https://join.stifel.com/api/jobs",
       "ok": true,
-      "item_count": 167,
+      "item_count": 166,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -42,7 +42,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -53,7 +53,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -64,7 +64,7 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -75,7 +75,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -84,9 +84,9 @@
       "ats": "Oracle",
       "endpoint": "https://hdpc.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
       "ok": true,
-      "item_count": 183,
+      "item_count": 184,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -97,7 +97,7 @@
       "ok": true,
       "item_count": 100,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -108,7 +108,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -119,7 +119,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -130,7 +130,7 @@
       "ok": true,
       "item_count": 1000,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -141,7 +141,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -152,7 +152,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -163,7 +163,7 @@
       "ok": true,
       "item_count": 331,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     },
     {
@@ -174,7 +174,7 @@
       "ok": true,
       "item_count": 400,
       "error": "",
-      "fetched_at_utc": "2026-11-25T16:52:39.240414+00:00",
+      "fetched_at_utc": "2026-11-26T16:29:39.095045+00:00",
       "salary_enriched": 0
     }
   ]
